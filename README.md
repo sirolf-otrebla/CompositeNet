@@ -23,7 +23,7 @@ The code was tested on Manjaro GNU/Linux "Nibia" 20.2.1, using a Conda environme
 - PlyFile
 - H5py
 
-All these dependencies can be install via `conda install <package>` when using a conda environment.
+All these dependencies can be installed via `conda install <package>` when using a conda environment.
 
 ## Nearest neighbor module
 We use the same NN module used in *ConvPoint*. 
