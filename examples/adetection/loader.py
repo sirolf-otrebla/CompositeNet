@@ -13,58 +13,55 @@ import time
 cfg_pool = [
 
     {
-        
-    # PARAMETERS FOR FOURIER-TRAINED RBFs
-    #########################################
 
-        #"pulse": 6.28,
-        #"truncation": 8,
-        
-    # COMPOSITE LAYER PARAMETERS
-    #########################################
-    
-        "n_centers": 56, #56,  # 48
-        "spatial_function_dimension":14, #14 # 6
-        "neighbours": 32,
-        "spatial": "RBFN-norelu",
-        "semantic": "aggregate",
+        # PARAMETERS FOR FOURIER-TRAINED RBFs
+        #########################################
 
+        # "pulse": 6.28,
+        # "truncation": 8,
 
-    # ARCHITECTURE PARAMETERS
-    #########################################
+        # COMPOSITE LAYER PARAMETERS
+        #########################################
 
-        "pl": 8, #8,  # 16,
+        "n_centers": 56,                                                #  number of centers inside the spatial function
+        "spatial_function_dimension": 14,                               # spatial function's output dimension
+        "neighbours": 32,                                               # cardinality of each neighbourhood
+        "spatial": "RBFN-norelu",                                       # kind of spatial function used. you can find some already implemented
+        "semantic": "aggregate",                                        # kind of semantic function used. You can choose between aggregate or linear (convolutional)
+
+        # ARCHITECTURE PARAMETERS
+        #########################################
+
+        "pl": 8,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
         "dropout": 0.5,
-        "architecture": "CompositeNet",
-        "TL_path": None,  # "./save/AD_TL/state_dict.pth",
-        "batchsize" : 16,
-        "npoints" : 1024,
-        "biases": False,
+        "architecture": "CompositeNet",                                 # you can choose between CompositeNet and the original ConvPoint architecture
+        "batchsize": 16,
+        "npoints": 1024,
+        "biases": False,                                                # remove biases through the network
 
-    # DEEP SVDD PARAMETERS
+        # DEEP SVDD PARAMETERS
+        #########################################
+
+        "R": .1,                                                        # used only in soft-bound SVDD as in the paper by Ruff et al. ignore it if using the One-Class loss
+        "c": 1000,                                                      # currently unused, since the SVDD center is set by computing the network's forward pass
+        "nu": .6,                                                       # used only in soft-bound SVDD as in the paper by Ruff et al. ignore it if using the One-Class loss
+        "center_fixed": True,                                           # the trainer does not update the center's position
+        "soft_bound": False,                                            # Choose between One-Class or Soft-Bound Deep SVDD. In the paper, we employed One-Class Deep SVDD
+        "output_dimension": 128,  # 128,                                # dimension of the Deep SVDD output sphere
+        "warm_up_n_epochs": 15,                                         # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
+        "noise_reg": True,                                              # adds random noise to the loss in order to prevent mode collapse
+
+        # EXPERIMENT PARAMETERS
     #########################################
 
-        "R": .1,
-        "c": 1000,
-        "nu": .6,
-        "center_fixed": True,
-        "soft_bound" : False,
-        "output_dimension": 128,  # 128,
-        "warm_up_n_epochs" : 15,
-        "noise_reg" : True,
- 
-    # EXPERIMENT PARAMETERS
-    #########################################
-
-        "rootdir": "./data/shapenet",
-        "savedir": "./exp_Aggregate_sameParameters_Noise_hardLoss",
-        "classes": [0, 5, 8, 13, 14, 18, 31, 33, 45, 48, 50],                 # each class will be repeated $repetitions times
-        "anomalies" : [1,2,3],
-        "repetitions" : 10,
-        "epoch_nbr": 20,
+        "rootdir": "./data/shapenetcorev2_hdf5_2048",                   # dataset's directory
+        "savedir": "./exp_Aggregate_sameParameters_Noise_hardLoss",     # directory where you want to save the output of the experiment
+        "classes": [0, 5, 8, 13, 14, 18, 31, 33, 45, 48, 50],           # classes to be tested
+        "anomalies" : [1,2,3],                                          # classes to be used as Anomalies. if None, all non_normal classes are used
+        "repetitions" : 10,                                             # how many runs for each class
+        "epoch_nbr": 20,                                                # training epochs
         "ntree" : 1,
-        "cuda" : True,
-        "test" : False,
+        "cuda" : True,                                                  # use Cuda or not
 
 
     # OTHER PARAMETERS

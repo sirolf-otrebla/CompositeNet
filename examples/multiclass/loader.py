@@ -12,33 +12,35 @@ config = [
         # COMPOSITE LAYER PARAMETERS
         #########################################
 
-        "n_centers": 56,  # 56,  # 48
-        "spatial_function_dimension": 16,  # 14 # 6
-        "neighbours": 32,
-        "spatial": "RBFN-norelu",
-        "semantic": "aggregate", # choices: aggregate or linear
+        "n_centers": 56,                                                 #  number of centers inside the spatial function
+        "spatial_function_dimension": 16,                                # spatial function's output dimension
+        "neighbours": 32,                                                # cardinality of each neighbourhood
+        "spatial": "RBFN-norelu",                                        # kind of spatial function used. you can find some already implemented
+        "semantic": "aggregate",                                         # kind of semantic function used. You can choose between aggregate or linear (convolutional)
 
         # ARCHITECTURE PARAMETERS
         #########################################
 
-        "pl": 64,  #omega
-        "dropout": 0.33,
+        "pl": 64,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
+        "dropout": 0.33,                                                 # you can choose between CompositeNet and the original ConvPoint architecture
         "architecture": "CompositeNet",
         "TL_path": None,  # "./save/AD_TL/state_dict.pth",
         "batchsize": 16,
         "npoints": 1024,
-        "biases": False,
+        "biases": True,                                                  # remove biases through the network
 
         # EXPERIMENT PARAMETERS
         #########################################
 
-        "rootdir": "./data/multiclass",
-        "savedir": "./saved_reults/",
+        "rootdir": "./data/modelnet40_hdf5_2048",                        # dataset's directory
+        "savedir": "./saved_reults/",                                    # directory where you want to save the output of the experiment
+                                                                         # if testing, this directory has to contain a
+                                                                         # network state named "state_dict.pth"
         "epochs": 200,
         "ntree": 1,
         "cuda": True,
         "test": False,
-        "schedule": [30, 60, 90],  # [20, 35, 50, 70],
+        "schedule": [30, 60, 90],                                        # learning rate schedule
 
         # OTHER PARAMETERS
         #########################################
@@ -54,9 +56,12 @@ if __name__ == '__main__':
         dataset = ModelNetDataContainer(c["rootdir"])
         netFactory = modelBuilder(1, len(dataset.getLabels()))
         net = netFactory.generate(c["architecture"], c)
-
         trainer = Trainer(dataContainer=dataset, net=net, config=c)
-
-        trainer.train(epoch_nbr=c["epochs"])
+        if c['test']:
+            save_dir = c['savedir']
+            net.load_state_dict(torch.load(os.path.join(save_dir, "state_dict.pth")))
+            trainer.apply(0,training=False)
+        else:
+            trainer.train(epoch_nbr=c["epochs"])
 
 

@@ -36,9 +36,6 @@ class Trainer():
             folderName, 
             "Experiment_{}".format(time_string))
         # setting stuff for trainer
-        if config["test"]:
-            save_dir = config['savedir']
-            net.load_state_dict(torch.load(os.path.join(save_dir, "state_dict.pth")))
         if config["cuda"]:
             net.cuda()
         print("Number of parameters", self.count_parameters(net))
