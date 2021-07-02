@@ -36,7 +36,7 @@ cd CompositeLayer/knn
 python setup.py install --home="."
 ```
 
-In the case, you do not want to use this C++/Python wrapper. You still can use the previous version of the nearest neighbors computation with Scikit Learn and Multiprocessing, python only version (slower). To do so, add the following lines at the start of your main script (e.g. ```modelnet_classif.py```):
+You can also use the nearest neighbors computation with Scikit Learn and Multiprocessing, python only version (slower). To do so, add the following lines at the start of your main script (e.g. ```modelnet_classif.py```):
 ```
 from global_tags import GlobalTags
 GlobalTags.legacy_layer_base(True)
