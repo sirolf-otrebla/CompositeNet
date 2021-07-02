@@ -61,7 +61,7 @@ cfg_pool = [
         "repetitions" : 10,                                             # how many runs for each class
         "epoch_nbr": 20,                                                # training epochs
         "ntree" : 1,
-        "cuda" : True,                                                  # use Cuda or not
+        "cuda" : False,                                                  # use Cuda or not
 
 
     # OTHER PARAMETERS

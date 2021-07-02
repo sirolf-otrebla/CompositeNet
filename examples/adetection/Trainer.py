@@ -81,7 +81,9 @@ class Trainer():
             alpha = 0.8
             beta = 0.5
             reg_loss = nn.BCEWithLogitsLoss(reduction='sum')
-            random_target = torch.empty(reg_outputs.shape, requires_grad=False).random_(0,2).cuda()
+            random_target = torch.empty(reg_outputs.shape, requires_grad=False).random_(0,2)
+            if self.config["cuda"]:
+                random_target = random_target.cuda()
             self.reg_weight = alpha*self.reg_weight + beta*(1-alpha)*(loss/reg_loss(reg_outputs,random_target)).item()
             loss += self.reg_weight*reg_loss(reg_outputs,random_target)
         ## --------------------------------------------------------
@@ -105,13 +107,17 @@ class Trainer():
 
         """Initialize hypersphere center c as the mean from an initial forward pass on the data."""
         n_samples = 0
-        c = torch.zeros(net.rep_dim).cuda()
+        c = torch.zeros(net.rep_dim)
+        if self.config["cuda"]:
+            c = c.cuda()
         net.eval()
         with torch.no_grad():
             for data in train_loader:
                 # get the inputs of the batch
                 pts, features, _2, _3  = data
-                outputs, _ = net(features.cuda(), pts.cuda())
+                if self.config["cuda"]:
+                    features, pts = features.cuda(), pts.cuda()
+                outputs, _ = net(features, pts)
                 n_samples += outputs.shape[0]
                 c += torch.sum(outputs, dim=0)
         c /= n_samples

@@ -30,7 +30,10 @@ All these dependencies can be installed via `conda install <package>` when using
 - AMD® Ryzen 7 3800x 8-core processor 
 - Nvidia GTX 1080 w/ 8GiB VRAM
 
-Note that in some older video cards issues may arise during training.
+The code was developed to be run over a CUDA GPU. Note that in some older video cards issues may arise during training.
+
+It is possible, though not recommended, to execute
+the code over the CPU by setting `cuda : False` inside each experiment's configuration. 
 
 ## Nearest neighbor module
 We use the same NN module used in *ConvPoint*. 
