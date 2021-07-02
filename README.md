@@ -12,7 +12,7 @@ https://github.com/aboulch/ConvPoint
 
 ## Platform and dependencies
 
-The code was tested on Manjaro GNU/Linux "Nibia" 20.2.1, using a Conda environment with the following packages installed
+The code was tested on Manjaro GNU/Linux "Nibia" 20.2.1, using a Conda environment with the following packages installed:
 
 - CUDAtoolkit 10.2.89
 - CUDNN 7.6.5
@@ -25,7 +25,12 @@ The code was tested on Manjaro GNU/Linux "Nibia" 20.2.1, using a Conda environme
 - Matplotlib
 - Seaborn
 
-All these dependencies can be installed via `conda install <package>` when using a conda environment.
+All these dependencies can be installed via `conda install <package>` when using a conda environment. The testing hardware configuration is the following:
+
+- AMD® Ryzen 7 3800x 8-core processor 
+- Nvidia GTX 1080 w/ 8GiB VRAM
+
+Note that in some older video cards issues may arise during training.
 
 ## Nearest neighbor module
 We use the same NN module used in *ConvPoint*. 
