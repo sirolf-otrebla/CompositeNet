@@ -22,6 +22,8 @@ The code was tested on Manjaro GNU/Linux "Nibia" 20.2.1, using a Conda environme
 - TQDM 
 - PlyFile
 - H5py
+- Matplotlib
+- Seaborn
 
 All these dependencies can be installed via `conda install <package>` when using a conda environment.
 
