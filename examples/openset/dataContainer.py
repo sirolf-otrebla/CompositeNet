@@ -8,8 +8,8 @@ class OpenSetModelNetDataContainer():
 
     def __init__(self, rootDirectory, known_class_list, unknown_class_list):
         # first label is airplane, we consider it to be normal. the others are anomalies
-        self.labels = range(len(self.known_class_list)+1) # we add one label for all the unknowns
         self.known_class_list = known_class_list
+        self.labels = range(len(self.known_class_list)+1) # we add one label for all the unknowns
         self.unknown_class_list = unknown_class_list
 
         print("Getting train files...")
