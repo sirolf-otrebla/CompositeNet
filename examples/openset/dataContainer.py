@@ -90,11 +90,11 @@ class OpenSetModelNetDataContainer():
     def getDataLoader(self, numPts, threads, iterPerShape, batchSize):
 
         print("Creating dataloaders...", end="")
-        ds = PointCloudFileLists(self.train_data, self.train_labels, self.train_normals, pt_nbr=numPts)
+        ds = PointCloudFileLists(self.train_data, self.train_labels, pt_nbr=numPts) #normals removed
         train_loader = torch.utils.data.DataLoader(ds, batch_size=batchSize, shuffle=True, num_workers=threads)
-        ds_test = PointCloudFileLists(self.test_data, self.test_labels, self.test_normals, pt_nbr=numPts,
+        ds_test = PointCloudFileLists(self.test_data, self.test_labels, pt_nbr=numPts,
                                       training=False,
-                                      num_iter_per_shape=iterPerShape)
+                                      num_iter_per_shape=iterPerShape) # same here
         test_loader = torch.utils.data.DataLoader(ds_test, batch_size=batchSize, shuffle=False,
                                                   num_workers=threads)
         print("done")
