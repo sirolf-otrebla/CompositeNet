@@ -22,7 +22,7 @@ config = [
         # ARCHITECTURE PARAMETERS
         #########################################
 
-        "pl": 64,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
+        "pl": 32,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
         "dropout": 0.33,                                                 # you can choose between CompositeNet and the original ConvPoint architecture
         "architecture": "CompositeNet",
         "TL_path": None,  # "./save/AD_TL/state_dict.pth",
@@ -37,7 +37,7 @@ config = [
         "savedir": "./saved_reults/",                                    # directory where you want to save the output of the experiment
                                                                          # if testing, this directory has to contain a
                                                                          # network state named "state_dict.pth"
-        "epochs": 50,
+        "epochs": 20,
         "ntree": 1,
         "cuda": True,
         "test": False,
