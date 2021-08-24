@@ -176,10 +176,10 @@ class Trainer():
 
             pred_softmax, pred_softmax_threshold, pred_openmax, scores_softmax, scores_openmax = self.apply_openmax(scores)
             os_metrics  = self.compute_test_metrics(pred_openmax, scores_openmax, "Openmax")
-            sts_metrics = self.compute_test_metrics(pred_openmax, scores_openmax, "Softmax_threshold")
-            ss_metrics  = self.compute_test_metrics(pred_openmax, scores_openmax, "Softmax")
+            sts_metrics = self.compute_test_metrics(pred_softmax_threshold, scores_softmax, "Softmax_threshold")
+            ss_metrics  = self.compute_test_metrics(pred_softmax, scores_softmax, "Softmax")
 
-            return os_metrics.append(sts_metrics).append(ss_metrics)
+            return (os_metrics.append(sts_metrics)).append(ss_metrics)
 
     def count_parameters(self, model):
         parameters = model.parameters()
