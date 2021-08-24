@@ -221,6 +221,7 @@ class Trainer():
 
     def write_log_line(self, *args):
         for arg in args:
+            print(arg)
             self.logFile.write(arg)
             self.logFile.write(",")
         self.logFile.write("\n")
