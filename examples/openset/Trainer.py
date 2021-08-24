@@ -38,7 +38,7 @@ class Trainer():
 
     def __init__(self, dataContainer, net, config, folderName=None):
 
-        self.N_TRAIN_LABELS = len(dataContainer.getLabels())
+        self.N_TRAIN_LABELS = len(dataContainer.getLabels) - 1
         self.labels_list = dataContainer.getLabels()
         self.config = config
         config["n_parameters"] = self.count_parameters(net)
