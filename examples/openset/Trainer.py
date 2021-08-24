@@ -219,9 +219,8 @@ class Trainer():
 
         return pred_softmax, pred_softmax_threshold, pred_openmax, score_softmax, score_openmax
 
-    def write_log_line(self, *args):
+    def write_log_line(self, args):
         for arg in args:
-            print(arg)
             self.logFile.write(arg)
             self.logFile.write(",")
         self.logFile.write("\n")
