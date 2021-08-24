@@ -37,7 +37,7 @@ config = [
         "savedir": "./saved_reults/",                                    # directory where you want to save the output of the experiment
                                                                          # if testing, this directory has to contain a
                                                                          # network state named "state_dict.pth"
-        "epochs": 200,
+        "epochs": 50,
         "ntree": 1,
         "cuda": True,
         "test": False,
