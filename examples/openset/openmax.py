@@ -127,7 +127,7 @@ def compute_train_score_and_mavs_and_dists(train_class_num, trainloader, net, de
     with torch.no_grad():
 
         # for batch_idx, (inputs, targets) in enumerate(trainloader)
-        for pts, features, targets, indices in enumerate(trainloader):
+        for batch_idx, (pts, features, targets, indices) in enumerate(trainloader):
             pts, features, targets = pts.to(device), features.to(device), targets.to(device)
 
             # We don't use softmax for outputs
