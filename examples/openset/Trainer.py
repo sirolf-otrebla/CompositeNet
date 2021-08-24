@@ -94,7 +94,7 @@ class Trainer():
             # SAVE NETWORK
             torch.save(self.net.state_dict(), os.path.join(self.save_dir, "state_dict.pth"))
             # WRITE IN LOG FILE
-            self.write_log_line(train_metrics.append(test_metrics))
+            self.write_log_line(train_metrics + test_metrics)
 
         f.close()
 
@@ -179,7 +179,7 @@ class Trainer():
             sts_metrics = self.compute_test_metrics(pred_softmax_threshold, scores_softmax, "Softmax_threshold")
             ss_metrics  = self.compute_test_metrics(pred_softmax, scores_softmax, "Softmax")
 
-            return (os_metrics.append(sts_metrics)).append(ss_metrics)
+            return os_metrics + sts_metrics + ss_metrics
 
     def count_parameters(self, model):
         parameters = model.parameters()
