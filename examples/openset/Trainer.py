@@ -13,7 +13,7 @@ import torch.utils.data
 from matplotlib import pyplot as plt
 import seaborn as sns
 import utils.metrics as metrics
-from examples.multiclass.dataContainer import *
+from examples.openset.dataContainer import *
 from examples.openset.openmax import *
 from examples.openset.evaluation import *
 

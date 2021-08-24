@@ -13,12 +13,12 @@ class OpenSetModelNetDataContainer():
         self.unknown_class_list = unknown_class_list
 
         print("Getting train files...")
-        self.train_data, self.train_labels, self.train_normals = self.get_data(rootDirectory, "train_files.txt", "train", unknown_class_list)
+        self.train_data, self.train_labels, self.train_normals = self.get_data(rootDirectory, "train_files.txt", "train")
         print("Getting test files...")
-        self.test_data, self.test_labels, self.test_normals = self.get_data(rootDirectory, "test_files.txt", "test", unknown_class_list)
+        self.test_data, self.test_labels, self.test_normals = self.get_data(rootDirectory, "test_files.txt", "test")
         print("done")
 
-    def get_data(self, rootdir, files, mode="train", anomalies=None): #38
+    def get_data(self, rootdir, files, mode="train"): #38
 
         filenames = []
         for line in open(os.path.join(rootdir, files), "r"):
