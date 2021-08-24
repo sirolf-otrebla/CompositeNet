@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     for c in config:
         dataset = OpenSetModelNetDataContainer(c["rootdir"], c["known_classes"], c["unknown_classes"])
-        netFactory = modelBuilder(1, len(c["known_classes"]))
+        netFactory = modelBuilder(1, 10)
         net = netFactory.generate(c["architecture"], c)
         trainer = Trainer(dataContainer=dataset, net=net, config=c)
         if c['test']:
