@@ -16,7 +16,7 @@ config = [
         "n_centers": 56,                                                 #  number of centers inside the spatial function
         "spatial_function_dimension": 16,                                # spatial function's output dimension
         "neighbours": 32,                                                # cardinality of each neighbourhood
-        "spatial": "convpoint",                                        # kind of spatial function used. you can find some already implemented
+        "spatial": "Convpoint",                                        # kind of spatial function used. you can find some already implemented
         "semantic": "linear",                                         # kind of semantic function used. You can choose between aggregate or linear (convolutional)
 
         # ARCHITECTURE PARAMETERS
@@ -24,7 +24,7 @@ config = [
 
         "pl": 32,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
         "dropout": 0.33,                                                 # you can choose between CompositeNet and the original ConvPoint architecture
-        "architecture": "CompositeNet",
+        "architecture": "Convpoint",
         "TL_path": None,  # "./save/AD_TL/state_dict.pth",
         "batchsize": 16,
         "npoints": 1024,
