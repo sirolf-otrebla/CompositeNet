@@ -174,17 +174,19 @@ class Trainer():
         # ___________________________________________________________
         #
         else:
-
+            times_list = []
             predictions = np.zeros((self.test_data.shape[0], self.N_LABELS), dtype=float)
             t = tqdm(self.test_loader, desc="  Test " + str(epoch), ncols=100)
-            then = time.time()
             for pts, features, targets, indices in t:
                 if self.config['cuda']:
                     features = features.cuda()
                     pts = pts.cuda()
                     targets = targets.cuda()
                 # FEEDING INPUT
+                then = time.time()
                 outputs = self.net(features, pts)
+                elapsed = time.time() - then
+                times_list.append(elapsed/1000)
                 targets = targets.view(-1)
                 # COMPUTING LOSS FOR BATCH
                 loss = F.cross_entropy(outputs, targets)
@@ -204,7 +206,8 @@ class Trainer():
                     aiou = "{:.5f}".format(metrics.stats_iou_per_class(cm)[0])
                     aloss = "{:.5e}".format(error / cm.sum())
                     t.set_postfix(OA=oa, AA=aa, AIOU=aiou, ALoss=aloss)
-            print("elapsed time {:.5f}".format((time.time() - then)/1000))
+
+            print("mean time for batch: {:.5f} ms".format(np.mean(times_list)))
             # COMPUTING EPOCH METRICS
             predicted_classes = np.argmax(predictions, axis=1)
             scores_np = predictions - np.expand_dims(np.min(predictions, axis=1), axis=1)
