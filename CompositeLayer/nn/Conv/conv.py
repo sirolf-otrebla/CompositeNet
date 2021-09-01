@@ -172,7 +172,7 @@ class CompositeConv(LayerBase):
             return TrainedRBFSpatialLayer(config, dim, relu=True)
         elif id == "TRBFN-norelu":
             return TrainedRBFSpatialLayer(config, dim, relu=False)
-        elif id == "CompositeLayer":
+        elif id == "Convpoint":
             return ConvpointSpatialLayer(config, dim)
         return
 

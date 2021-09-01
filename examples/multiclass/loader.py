@@ -1,5 +1,6 @@
 from examples.multiclass.Trainer import *
 from examples.multiclass.dataContainer import *
+from torch.profiler import profile, record_function, ProfilerActivity
 config = [
     {
 
@@ -15,8 +16,8 @@ config = [
         "n_centers": 56,                                                 #  number of centers inside the spatial function
         "spatial_function_dimension": 16,                                # spatial function's output dimension
         "neighbours": 32,                                                # cardinality of each neighbourhood
-        "spatial": "RBFN-norelu",                                        # kind of spatial function used. you can find some already implemented
-        "semantic": "aggregate",                                         # kind of semantic function used. You can choose between aggregate or linear (convolutional)
+        "spatial": "Convpoint",                                        # kind of spatial function used. you can find some already implemented
+        "semantic": "linear",                                         # kind of semantic function used. You can choose between aggregate or linear (convolutional)
 
         # ARCHITECTURE PARAMETERS
         #########################################
@@ -36,7 +37,7 @@ config = [
         "savedir": "./saved_reults/",                                    # directory where you want to save the output of the experiment
                                                                          # if testing, this directory has to contain a
                                                                          # network state named "state_dict.pth"
-        "epochs": 200,
+        "epochs": 1,
         "ntree": 1,
         "cuda": True,
         "test": False,
@@ -62,6 +63,8 @@ if __name__ == '__main__':
             net.load_state_dict(torch.load(os.path.join(save_dir, "state_dict.pth")))
             trainer.apply(0,training=False)
         else:
-            trainer.train(epoch_nbr=c["epochs"])
+            with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
+                trainer.train(epoch_nbr=c["epochs"])
+            print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
 
 

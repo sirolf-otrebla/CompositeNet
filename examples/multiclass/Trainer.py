@@ -14,6 +14,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import utils.metrics as metrics
 from examples.multiclass.dataContainer import *
+from torch.profiler import profile, record_function, ProfilerActivity
 
 class modelBuilder():
 
@@ -180,7 +181,8 @@ class Trainer():
                     pts = pts.cuda()
                     targets = targets.cuda()
                 # FEEDING INPUT
-                outputs = self.net(features, pts)
+                with record_function("model_inference"):
+                    outputs = self.net(features, pts)
                 targets = targets.view(-1)
                 # COMPUTING LOSS FOR BATCH
                 loss = F.cross_entropy(outputs, targets)
