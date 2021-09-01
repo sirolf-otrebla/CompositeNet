@@ -63,8 +63,5 @@ if __name__ == '__main__':
             net.load_state_dict(torch.load(os.path.join(save_dir, "state_dict.pth")))
             trainer.apply(0,training=False)
         else:
-            with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA], record_shapes=True) as prof:
-                trainer.train(epoch_nbr=c["epochs"])
-                print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
-
+            trainer.train(epoch_nbr=c["epochs"])
 
