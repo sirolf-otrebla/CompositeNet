@@ -65,6 +65,6 @@ if __name__ == '__main__':
         else:
             with profile(activities=[ProfilerActivity.CPU], record_shapes=True) as prof:
                 trainer.train(epoch_nbr=c["epochs"])
-            print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
+                print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
 
 
