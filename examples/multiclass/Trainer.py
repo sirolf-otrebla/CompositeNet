@@ -186,7 +186,7 @@ class Trainer():
                 then = time.time()
                 outputs = self.net(features, pts)
                 elapsed = time.time() - then
-                times_list.append(elapsed/1000)
+                times_list.append(elapsed*1000)
                 targets = targets.view(-1)
                 # COMPUTING LOSS FOR BATCH
                 loss = F.cross_entropy(outputs, targets)
