@@ -25,7 +25,7 @@ class ADCompositeNet(nn.Module):
         #self.cv5 = CompositeConv(4 * pl, 6 * pl, config,dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
         #self.cv6 = CompositeConv(6 * pl, 8 * pl, config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
         # last layer
-        self.fcout = nn.Linear(8 * pl, output_channels, bias=False) # was 8*pl
+        self.fcout = nn.Linear(2 * pl, output_channels, bias=False) # was 8*pl
         self.old_output_channels = output_channels
         self.fcout2 = nn.Linear(output_channels, 20, bias=False)
         # batchnorms
