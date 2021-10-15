@@ -47,7 +47,7 @@ cfg_pool = [
         "nu": .6,                                                       # used only in soft-bound SVDD as in the paper by Ruff et al. ignore it if using the One-Class loss
         "center_fixed": True,                                           # the trainer does not update the center's position
         "soft_bound": False,                                            # Choose between One-Class or Soft-Bound Deep SVDD. In the paper, we employed One-Class Deep SVDD
-        "output_dimension": 128,  # 128,                                # dimension of the Deep SVDD output sphere
+        "output_dimension": 64,  # 128,                                 # dimension of the Deep SVDD output sphere
         "warm_up_n_epochs": 15,                                         # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
         "noise_reg": True,                                              # adds random noise to the loss in order to prevent mode collapse
 
@@ -55,7 +55,7 @@ cfg_pool = [
     #########################################
 
         "rootdir": "./data/shapenetcorev2_hdf5_2048",                   # dataset's directory
-        "savedir": "./exp_Aggregate_sameParameters_Noise_hardLoss",     # directory where you want to save the output of the experiment
+        "savedir": "./exp_Aggregate_outDim64_Noise_hardLoss",           # directory where you want to save the output of the experiment
         "classes": [0, 5, 8, 13, 14, 18, 31, 33, 45, 48, 50],           # classes to be tested
         "anomalies" : [1,2,3],                                          # classes to be used as Anomalies. if None, all non_normal classes are used
         "repetitions" : 10,                                             # how many runs for each class
