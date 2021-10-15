@@ -36,7 +36,7 @@ cfg_pool = [
         "dropout": 0.5,
         "architecture": "CompositeNet",                                 # you can choose between CompositeNet and the original ConvPoint architecture
         "batchsize": 16,
-        "npoints": 1024,
+        "npoints": 512,
         "biases": False,                                                # remove biases through the network
 
         # DEEP SVDD PARAMETERS

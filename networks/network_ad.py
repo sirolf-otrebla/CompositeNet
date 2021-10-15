@@ -21,9 +21,9 @@ class ADCompositeNet(nn.Module):
 
         self.cv1 = CompositeConv(input_channels, pl, config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
         self.cv3 = CompositeConv(pl, 2 * pl,  config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
-        self.cv4 = CompositeConv(2 * pl, 4 * pl, config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
-        self.cv5 = CompositeConv(4 * pl, 6 * pl, config,dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
-        self.cv6 = CompositeConv(6 * pl, 8 * pl, config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
+        #self.cv4 = CompositeConv(2 * pl, 4 * pl, config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
+        #self.cv5 = CompositeConv(4 * pl, 6 * pl, config,dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
+        #self.cv6 = CompositeConv(6 * pl, 8 * pl, config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
         # last layer
         self.fcout = nn.Linear(8 * pl, output_channels, bias=False) # was 8*pl
         self.old_output_channels = output_channels
@@ -31,9 +31,9 @@ class ADCompositeNet(nn.Module):
         # batchnorms
         self.bn1 = nn.BatchNorm1d(pl, eps=1e-4, affine=False, track_running_stats=False)
         self.bn3 = nn.BatchNorm1d(2 * pl, eps=1e-4, affine=False, track_running_stats=False)
-        self.bn4 = nn.BatchNorm1d(4 * pl, eps=1e-4, affine=False, track_running_stats=False)
-        self.bn5 = nn.BatchNorm1d(6 * pl, eps=1e-4, affine=False, track_running_stats=False)
-        self.bn6 = nn.BatchNorm1d(8 * pl, eps=1e-4, affine=False, track_running_stats=False)
+        #self.bn4 = nn.BatchNorm1d(4 * pl, eps=1e-4, affine=False, track_running_stats=False)
+        #self.bn5 = nn.BatchNorm1d(6 * pl, eps=1e-4, affine=False, track_running_stats=False)
+        #self.bn6 = nn.BatchNorm1d(8 * pl, eps=1e-4, affine=False, track_running_stats=False)
 
         self.dropout = nn.Dropout(config["dropout"])
 
@@ -41,22 +41,22 @@ class ADCompositeNet(nn.Module):
 
     def forward(self, x, input_pts):
 
-        x1, pts1 = self.cv1(x, input_pts, 32, 1024)
+        x1, pts1 = self.cv1(x, input_pts, 32, 128)
         x1 = self.relu(x1)
 
-        x3, pts3 = self.cv3(x1, pts1, 32, 256)
+        x3, pts3 = self.cv3(x1, pts1, 32, 32)
         x3 = self.relu(apply_bn(x3, self.bn3))
 
-        x4, pts4 = self.cv4(x3, pts3, 16, 64)
-        x4 = self.relu(x4)
+        #x4, pts4 = self.cv4(x3, pts3, 16, 64)
+        #x4 = self.relu(x4)
 
-        x5, pts5 = self.cv5(x4, pts4, 16, 16)
-        x5 = self.relu(apply_bn(x5, self.bn5))
+        #x5, pts5 = self.cv5(x4, pts4, 16, 16)
+        #x5 = self.relu(apply_bn(x5, self.bn5))
 
-        x6, _ = self.cv6(x5, pts5, 16, 1)
-        x6 = self.relu(x6)
+        #x6, _ = self.cv6(x5, pts5, 16, 1)
+        #x6 = self.relu(x6)
 
-        xout = x6.view(x6.size(0), -1)
+        xout = x3.view(x3.size(0), -1)
         xout = self.dropout(xout)
         xout = self.fcout(xout)
         xreg = self.fcout2(self.relu(xout))
