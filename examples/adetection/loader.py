@@ -54,7 +54,7 @@ cfg_pool = [
         # EXPERIMENT PARAMETERS
     #########################################
 
-        "rootdir": "./data/shapenetcorev2_hdf5_2048",                   # dataset's directory
+        "rootdir": "./data/shapenet",                                   # dataset's directory
         "savedir": "./exp_Aggregate_outDim64_Noise_hardLoss",           # directory where you want to save the output of the experiment
         "classes": [0, 5, 8, 13, 14, 18, 31, 33, 45, 48, 50],           # classes to be tested
         "anomalies" : [1,2,3],                                          # classes to be used as Anomalies. if None, all non_normal classes are used
