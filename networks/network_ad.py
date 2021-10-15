@@ -21,17 +21,17 @@ class ADCompositeNet(nn.Module):
 
         self.cv1 = CompositeConv(input_channels, pl, config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
         self.cv3 = CompositeConv(pl, 2 * pl,  config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
-        #self.cv4 = CompositeConv(2 * pl, 4 * pl, config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
+        self.cv4 = CompositeConv(2 * pl, 4 * pl, config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
         #self.cv5 = CompositeConv(4 * pl, 6 * pl, config,dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
         #self.cv6 = CompositeConv(6 * pl, 8 * pl, config, dimension, spatial_id=config["spatial"], semantic_id=config["semantic"])
         # last layer
-        self.fcout = nn.Linear(2 * pl, output_channels, bias=False) # was 8*pl
+        self.fcout = nn.Linear(4 * pl, output_channels, bias=False) # was 8*pl
         self.old_output_channels = output_channels
         self.fcout2 = nn.Linear(output_channels, 20, bias=False)
         # batchnorms
         self.bn1 = nn.BatchNorm1d(pl, eps=1e-4, affine=False, track_running_stats=False)
         self.bn3 = nn.BatchNorm1d(2 * pl, eps=1e-4, affine=False, track_running_stats=False)
-        #self.bn4 = nn.BatchNorm1d(4 * pl, eps=1e-4, affine=False, track_running_stats=False)
+        self.bn4 = nn.BatchNorm1d(4 * pl, eps=1e-4, affine=False, track_running_stats=False)
         #self.bn5 = nn.BatchNorm1d(6 * pl, eps=1e-4, affine=False, track_running_stats=False)
         #self.bn6 = nn.BatchNorm1d(8 * pl, eps=1e-4, affine=False, track_running_stats=False)
 
@@ -47,8 +47,8 @@ class ADCompositeNet(nn.Module):
         x3, pts3 = self.cv3(x1, pts1, 32, 32)
         x3 = self.relu(apply_bn(x3, self.bn3))
 
-        #x4, pts4 = self.cv4(x3, pts3, 16, 64)
-        #x4 = self.relu(x4)
+        x4, pts4 = self.cv4(x3, pts3, 32, 1)
+        x4 = self.relu(x4)
 
         #x5, pts5 = self.cv5(x4, pts4, 16, 16)
         #x5 = self.relu(apply_bn(x5, self.bn5))
@@ -56,7 +56,7 @@ class ADCompositeNet(nn.Module):
         #x6, _ = self.cv6(x5, pts5, 16, 1)
         #x6 = self.relu(x6)
 
-        xout = x3.view(x3.size(0), -1)
+        xout = x4.view(x4.size(0), -1)
         xout = self.dropout(xout)
         xout = self.fcout(xout)
         xreg = self.fcout2(self.relu(xout))
