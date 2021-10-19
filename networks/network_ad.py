@@ -41,10 +41,10 @@ class ADCompositeNet(nn.Module):
 
     def forward(self, x, input_pts):
 
-        x1, pts1 = self.cv1(x, input_pts, self.neighbourhood, 128)
+        x1, pts1 = self.cv1(x, input_pts, 32, 128)
         x1 = self.relu(x1)
 
-        x3, pts3 = self.cv3(x1, pts1, self.neighbourhood, 32)
+        x3, pts3 = self.cv3(x1, pts1, 32, 32)
         x3 = self.relu(apply_bn(x3, self.bn3))
 
         x4, pts4 = self.cv4(x3, pts3, 32, 1)

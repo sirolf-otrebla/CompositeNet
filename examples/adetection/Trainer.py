@@ -50,8 +50,8 @@ class Trainer():
         self.test_labels = dataContainer.getTestLabels()
         self.train_data = dataContainer.getTrainData()
         self.train_labels = dataContainer.getTrainLabels()
-        self.optimizer = torch.optim.Adam(net.parameters(), lr=1e-3, weight_decay=1e-6)
-        self.scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, [3,6,8])
+        self.optimizer = torch.optim.Adam(net.parameters(), lr=1e-4, weight_decay=1e-6)
+        self.scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, [7,15, 20])
         self.net = net
         # ad parameters
         self.R = torch.tensor(self.config['R'])   # radius R initialized with 0 by default.
