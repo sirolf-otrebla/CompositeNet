@@ -2,7 +2,7 @@ from examples.adetection.Trainer import *
 # import pptk # for vizualizing point clouds 
 import numpy as np
 import matplotlib.pyplot as plt
-
+from torch import cuda, device
 #import imageio
 from scipy import misc
 from scipy.interpolate import interp1d
@@ -23,10 +23,10 @@ cfg_pool = [
         # COMPOSITE LAYER PARAMETERS
         #########################################
 
-        "n_centers": 56,                                                #  number of centers inside the spatial function
-        "spatial_function_dimension": 14,                               # spatial function's output dimension
+        "n_centers": 64,                                                #  number of centers inside the spatial function
+        "spatial_function_dimension": 6,                               # spatial function's output dimension
         "neighbours": 32,                                               # cardinality of each neighbourhood
-        "spatial": "RBFN-norelu",                                       # kind of spatial function used. you can find some already implemented
+        "spatial": "RBFN-relu",                                       # kind of spatial function used. you can find some already implemented
         "semantic": "aggregate",                                        # kind of semantic function used. You can choose between aggregate or linear (convolutional)
 
         # ARCHITECTURE PARAMETERS
@@ -47,19 +47,19 @@ cfg_pool = [
         "nu": .6,                                                       # used only in soft-bound SVDD as in the paper by Ruff et al. ignore it if using the One-Class loss
         "center_fixed": True,                                           # the trainer does not update the center's position
         "soft_bound": False,                                            # Choose between One-Class or Soft-Bound Deep SVDD. In the paper, we employed One-Class Deep SVDD
-        "output_dimension": 64,  # 128,                                 # dimension of the Deep SVDD output sphere
-        "warm_up_n_epochs": 15,                                         # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
+        "output_dimension": 128,  # 128,                                 # dimension of the Deep SVDD output sphere
+        "warm_up_n_epochs": 1,                                         # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
         "noise_reg": True,                                              # adds random noise to the loss in order to prevent mode collapse
 
         # EXPERIMENT PARAMETERS
     #########################################
 
         "rootdir": "./data/shapenet",                                   # dataset's directory
-        "savedir": "./exp_Aggregate_outDim64_Noise_hardLoss",           # directory where you want to save the output of the experiment
+        "savedir": "./exp_Aggregate_1810_128",           # directory where you want to save the output of the experiment
         "classes": [0, 5, 8, 13, 14, 18, 31, 33, 45, 48, 50],           # classes to be tested
-        "anomalies" : [1,2,3],                                          # classes to be used as Anomalies. if None, all non_normal classes are used
+        "anomalies" : [1,2,3],                                             # classes to be used as Anomalies. if None, all non_normal classes are used
         "repetitions" : 10,                                             # how many runs for each class
-        "epoch_nbr": 20,                                                # training epochs
+        "epoch_nbr": 10,                                                # training epochs
         "ntree" : 1,
         "cuda" : True,                                                  # use Cuda or not
 
@@ -71,16 +71,19 @@ cfg_pool = [
 
     },
 ]
+print(cuda.device_count())
+for d in range(cuda.device_count()):
+    if cuda.get_device_name(device(d)).startswith("Tesla"):
+        cuda.set_device(d)
 
+print(cuda.current_device(), cuda.get_device_name(device(d)))
 if __name__ == '__main__':
 
     for c in cfg_pool:
 
         if c['cuda']:
             torch.backends.cudnn.benchmark = True
-        
         for normal_class in c["classes"]:
-
             rocs = []
             aucs = []
             base_fpr = np.linspace(0, 1, 101)
