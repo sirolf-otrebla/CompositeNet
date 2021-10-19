@@ -125,3 +125,54 @@ class LinearSemanticLayer(nn.Module):
 
     def reset(self):
         nn.init.kaiming_normal_(self.feature_weight.data)
+
+
+class MLPSemanticLayer(nn.Module):
+
+    def __init__(self, input_features, output_features, config, use_bias=True, relu=False):
+
+        super(MLPSemanticLayer, self).__init__()
+
+        self.spatial_function_dimension = config["spatial_function_dimension"]
+        self.input_features = input_features
+        self.output_features = output_features
+        self.use_relu = relu
+        self.use_bias = config["biases"]
+        if use_bias:
+            self.bias = nn.Parameter(torch.Tensor(output_features), requires_grad=True)
+            self.bias.data.uniform_(-0.1,0.1)
+
+        # Weights
+
+        self.l1 = nn.Linear(self.input_features+self.spatial_function_dimension, self.input_features+self.spatial_function_dimension, bias=config["biases"])
+        self.l2 = nn.Linear(self.input_features+self.spatial_function_dimension, self.output_features, bias=config["biases"])
+        # self.l3 = nn.Linear(self.n_centers, self.spatial_function_dimension, bias=config["biases"])
+
+        self.relu = nn.ReLU(inplace=True)
+        self.tanh = nn.Tanh()
+
+
+    def forward(self, features, spatial_layer, K):
+
+        BATCH_SIZE = features.size(0)
+        PTS_PER_POINT_CLOUD = features.size(1)
+        NEIGHBOURS = K
+
+        features = features.view(BATCH_SIZE, PTS_PER_POINT_CLOUD, NEIGHBOURS, -1)
+        spatial_layer = spatial_layer.view(BATCH_SIZE, PTS_PER_POINT_CLOUD, NEIGHBOURS, -1)
+
+        input = torch.cat((features, spatial_layer), 3)
+
+        output = self.l1(input)
+        output = self.l2(self.relu(output))
+
+        output = torch.sum(output, 2)
+
+        return output
+
+    def freeze(self):
+        pass
+    def unfreeze(self):
+        pass
+    def reset(self):
+        pass

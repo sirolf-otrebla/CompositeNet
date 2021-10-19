@@ -181,6 +181,8 @@ class CompositeConv(LayerBase):
             return  LinearSemanticLayer(input_features, output_features, config, relu=False, use_bias=use_bias)
         elif id == "aggregate":
             return AggregateSemanticLayer(input_features, output_features, config, relu=False, use_bias=use_bias)
+        elif id == "MLP":
+            return MLPSemanticLayer(input_features, output_features, config, relu=False, use_bias=use_bias)
         return
 
     # this function selects the points propagated to the next layer,
