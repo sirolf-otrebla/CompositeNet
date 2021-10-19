@@ -1,6 +1,6 @@
 from examples.multiclass.Trainer import *
 from examples.multiclass.dataContainer import *
-from torch.profiler import profile, record_function, ProfilerActivity
+#from torch.profiler import profile, record_function, ProfilerActivity
 config = [
     {
 
