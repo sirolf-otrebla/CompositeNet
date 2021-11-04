@@ -1,6 +1,6 @@
 from examples.multiclass.Trainer import *
 from examples.multiclass.dataContainer import *
-from torch.profiler import profile, record_function, ProfilerActivity
+#from torch.profiler import profile, record_function, ProfilerActivity
 config = [
     {
 
@@ -33,11 +33,11 @@ config = [
         # EXPERIMENT PARAMETERS
         #########################################
 
-        "rootdir": "./data/modelnet40_hdf5_2048",                        # dataset's directory
-        "savedir": "./saved_reults/",                                    # directory where you want to save the output of the experiment
+        "rootdir": "./data/scannet",                        # dataset's directory
+        "savedir": "./saved_reults/MC_scannet_aggregate",                                    # directory where you want to save the output of the experiment
                                                                          # if testing, this directory has to contain a
                                                                          # network state named "state_dict.pth"
-        "epochs": 1,
+        "epochs": 100,
         "ntree": 1,
         "cuda": True,
         "test": False,
@@ -55,6 +55,7 @@ if __name__ == '__main__':
 
     for c in config:
         dataset = ModelNetDataContainer(c["rootdir"])
+        print("n_classes %d" % len(dataset.getLabels()))
         netFactory = modelBuilder(1, len(dataset.getLabels()))
         net = netFactory.generate(c["architecture"], c)
         trainer = Trainer(dataContainer=dataset, net=net, config=c)

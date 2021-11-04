@@ -16,7 +16,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import utils.metrics as metrics
 from examples.multiclass.dataContainer import *
-from torch.profiler import profile, record_function, ProfilerActivity
+#from torch.profiler import profile, record_function, ProfilerActivity
 
 class modelBuilder():
 
