@@ -25,14 +25,14 @@ class SelfSupervisedDataContainer():
 
         self.SS_rotations = [
 
-            create_3D_rotations(0, 0),
-            create_3D_rotations(0, 45),
-            create_3D_rotations(0, 90),
-            create_3D_rotations(0, 135),
-            create_3D_rotations(0, 180),
-            create_3D_rotations(0, 225),
-            create_3D_rotations(0, 270),
-            create_3D_rotations(0, 315),
+            create_3D_rotations(0),
+            create_3D_rotations(45),
+            create_3D_rotations(90),
+            create_3D_rotations(135),
+            create_3D_rotations(180),
+            create_3D_rotations(225),
+            create_3D_rotations(270),
+            create_3D_rotations(315),
         ]
 
         self.normal_class_list = normal_class_list
@@ -227,6 +227,7 @@ class PointCloudFileLists(torch.utils.data.Dataset):
                 c, s = np.cos(theta), np.sin(theta)
                 R = np.array([[c, -s, 0], [s, c, 0], [0, 0, 1]], dtype=np.float32)
 
+"""
             elif self.config.augment_rotation == 'all':
 
                 # Choose two random angles for the first vector in polar coordinates
@@ -241,6 +242,7 @@ class PointCloudFileLists(torch.utils.data.Dataset):
 
                 # Create the rotation matrix with this vector and angle
                 R = create_3D_rotations(np.reshape(u, (1, -1)), np.reshape(alpha, (1, -1)))[0]
+"""
 
         R = R.astype(np.float32)
 
@@ -287,13 +289,25 @@ class PointCloudFileLists(torch.utils.data.Dataset):
             return augmented_points, augmented_normals, scale, R
 
 
-def create_3D_rotations(axis, angle):
+def create_3D_rotations(theta):
     """
     Create rotation matrices from a list of axes and angles. Code from wikipedia on quaternions
     :param axis: float32[N, 3]
     :param angle: float32[N,]
     :return: float32[N, 3, 3]
     """
+    c, s = np.cos(theta), np.sin(theta)
+    R = np.array([[c, -s, 0], [s, c, 0], [1, 0, 0]], dtype=np.float32)
+    return R
+"""
+old
+
+def create_3D_rotations(axis, angle):
+
+    #Create rotation matrices from a list of axes and angles. Code from wikipedia on quaternions
+    #:param axis: float32[N, 3]
+    #:param angle: float32[N,]
+    #:return: float32[N, 3, 3]
 
     t1 = np.cos(angle)
     t2 = 1 - t1
@@ -319,3 +333,7 @@ def create_3D_rotations(axis, angle):
                   t1 + t2 * t24], axis=1)
 
     return np.reshape(R, (-1, 3, 3))
+
+
+
+"""
