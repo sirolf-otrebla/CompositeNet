@@ -48,7 +48,7 @@ cfg_pool = [
         "center_fixed": True,                                           # the trainer does not update the center's position
         "soft_bound": False,                                            # Choose between One-Class or Soft-Bound Deep SVDD. In the paper, we employed One-Class Deep SVDD
         "output_dimension": 64,  # 128,                                 # dimension of the Deep SVDD output sphere
-        "warm_up_n_epochs": 15,                                         # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
+        "warm_up_n_epochs": 1,                                         # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
         "noise_reg": True,                                              # adds random noise to the loss in order to prevent mode collapse
 
         # EXPERIMENT PARAMETERS
@@ -59,7 +59,7 @@ cfg_pool = [
         "classes": [0, 5, 8, 13, 14, 18, 31, 33, 45, 48, 50],           # classes to be tested
         "anomalies" : [1,2,3],                                          # classes to be used as Anomalies. if None, all non_normal classes are used
         "repetitions" : 10,                                             # how many runs for each class
-        "epoch_nbr": 20,                                                # training epochs
+        "epoch_nbr": 10,                                                # training epochs
         "ntree" : 1,
         "cuda" : True,                                                  # use Cuda or not
 
