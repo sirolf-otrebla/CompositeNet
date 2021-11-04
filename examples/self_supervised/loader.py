@@ -57,9 +57,9 @@ cfg_pool = [
         "epoch_nbr": 20,                                                # training epochs
         "ntree" : 1,
         "cuda" : True,                                                  # use Cuda or not
+        "schedule": [30, 60, 90],  # learning rate schedule
 
-
-    # OTHER PARAMETERS
+        # OTHER PARAMETERS
     #########################################
 
         "notes": " con CompositeLayer",
