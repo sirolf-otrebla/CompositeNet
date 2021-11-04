@@ -227,22 +227,21 @@ class PointCloudFileLists(torch.utils.data.Dataset):
                 c, s = np.cos(theta), np.sin(theta)
                 R = np.array([[c, -s, 0], [s, c, 0], [0, 0, 1]], dtype=np.float32)
 
-"""
-            elif self.config.augment_rotation == 'all':
+            #elif self.config.augment_rotation == 'all':
 
                 # Choose two random angles for the first vector in polar coordinates
-                theta = np.random.rand() * 2 * np.pi
-                phi = (np.random.rand() - 0.5) * np.pi
+                #theta = np.random.rand() * 2 * np.pi
+                #phi = (np.random.rand() - 0.5) * np.pi
 
                 # Create the first vector in carthesian coordinates
-                u = np.array([np.cos(theta) * np.cos(phi), np.sin(theta) * np.cos(phi), np.sin(phi)])
+                #u = np.array([np.cos(theta) * np.cos(phi), np.sin(theta) * np.cos(phi), np.sin(phi)])
 
                 # Choose a random rotation angle
-                alpha = np.random.rand() * 2 * np.pi
+                #alpha = np.random.rand() * 2 * np.pi
 
                 # Create the rotation matrix with this vector and angle
-                R = create_3D_rotations(np.reshape(u, (1, -1)), np.reshape(alpha, (1, -1)))[0]
-"""
+                #R = create_3D_rotations(np.reshape(u, (1, -1)), np.reshape(alpha, (1, -1)))[0]
+
 
         R = R.astype(np.float32)
 
