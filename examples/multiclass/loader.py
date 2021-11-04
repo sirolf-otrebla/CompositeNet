@@ -1,5 +1,6 @@
 from examples.multiclass.Trainer import *
 from examples.multiclass.dataContainer import *
+from torch import cuda, device
 #from torch.profiler import profile, record_function, ProfilerActivity
 config = [
     {
@@ -16,8 +17,8 @@ config = [
         "n_centers": 56,                                                 #  number of centers inside the spatial function
         "spatial_function_dimension": 16,                                # spatial function's output dimension
         "neighbours": 32,                                                # cardinality of each neighbourhood
-        "spatial": "Convpoint",                                        # kind of spatial function used. you can find some already implemented
-        "semantic": "linear",                                         # kind of semantic function used. You can choose between aggregate or linear (convolutional)
+        "spatial": "RBFN-norelu",                                        # kind of spatial function used. you can find some already implemented
+        "semantic": "MLP",                                         # kind of semantic function used. You can choose between aggregate or linear (convolutional)
 
         # ARCHITECTURE PARAMETERS
         #########################################
@@ -50,6 +51,14 @@ config = [
 
     },
 ]
+
+
+print(cuda.device_count())
+for d in range(cuda.device_count()):
+    if cuda.get_device_name(device(d)).startswith("Tesla"):
+        cuda.set_device(d)
+
+print(cuda.current_device(), cuda.get_device_name(device(d)))
 
 if __name__ == '__main__':
 

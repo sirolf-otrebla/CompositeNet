@@ -33,7 +33,7 @@ class ModelNetDataContainer():
         for filename in train_filenames:
             f = h5py.File(filename, 'r')
             data.append(f["data"])
-            labels.append(f["label"])
+            labels.append(f["label"][()].reshape(-1))
 
         data = np.concatenate(data, axis=0)
         labels = np.concatenate(labels, axis=0)
