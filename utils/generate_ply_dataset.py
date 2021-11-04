@@ -5,8 +5,9 @@ from examples.multiclass.dataContainer import ModelNetDataContainer
 
 
 ROOT = "../data/shapenetcorev2_hdf5_2048"
+NPOINTS=512
+SAVE_PATH = "../data/shapenet_ply_512pts"
 
-SAVE_PATH = "../data/shapenet_ply"
 if __name__ == '__main__':
 
     dataset = ModelNetDataContainer(ROOT)
@@ -17,8 +18,9 @@ if __name__ == '__main__':
 
         points = pd.DataFrame(data = train_data[i,:], columns = ["x", "y", "z"])
         pc = pyntcloud.PyntCloud(points)
+        pc = pc.get_sample("points_random", as_PyntCloud=True, n=NPOINTS)
         path = os.path.join(SAVE_PATH, "train")
-        path = os.path.join(path, str(train_labels[i,0]))
+        path = os.path.join(path, str(train_labels[i])) # [i,0]
         if not os.path.exists(path):
             os.mkdir(path)
         path = os.path.join(path, str(i)+".ply")
@@ -29,8 +31,9 @@ if __name__ == '__main__':
 
         points = pd.DataFrame(data = test_data[i,:], columns = ["x", "y", "z"])
         pc = pyntcloud.PyntCloud(points)
+        pc = pc.get_sample("points_random", as_PyntCloud=True, n=NPOINTS)
         path = os.path.join(SAVE_PATH, "test")
-        path = os.path.join(path, str(test_labels[i,0]))
+        path = os.path.join(path, str(test_labels[i])) #[i,0]
         if not os.path.exists(path):
             os.mkdir(path)
         path = os.path.join(path, str(i)+".ply")

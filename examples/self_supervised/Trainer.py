@@ -1,21 +1,12 @@
 import sys
-import time
 
 sys.path.append('../../')
 
 # other imports
-import numpy as np
-import os
-from tqdm import tqdm
-from datetime import datetime
-from sklearn.metrics import confusion_matrix
-import torch
-import torch.nn.functional as F
+
 import torch.utils.data
-from matplotlib import pyplot as plt
-import seaborn as sns
-import utils.metrics as metrics
-from examples.multiclass.dataContainer import *
+
+from examples.self_supervised.dataContainer import *
 #from torch.profiler import profile, record_function, ProfilerActivity
 
 class modelBuilder():
@@ -38,8 +29,8 @@ class Trainer():
 
     def __init__(self, dataContainer, net, config, folderName=None):
 
-        self.N_LABELS = len(dataContainer.getLabels())
-        self.labels_list = dataContainer.getLabels()
+        self.N_LABELS = len(dataContainer.getTransformationList())
+        self.labels_list = dataContainer.getTransformationList()
         self.config = config
         config["n_parameters"] = self.count_parameters(net)
         # define the save directory
@@ -55,9 +46,12 @@ class Trainer():
         self.train_loader, self.test_loader = dataContainer.getDataLoader(
             numPts=config['npoints'],
             threads=0,
-            iterPerShape=1,
             batchSize=config['batchsize']
         )
+
+        self.rocs = []
+        self.aucs = []
+
         self.test_data = dataContainer.getTestData()
         self.test_labels = dataContainer.getTestLabels()
         self.optimizer = torch.optim.Adam(net.parameters(), lr=1e-4)
@@ -75,6 +69,9 @@ class Trainer():
         print(logFile)
         return logFile
 
+    def normality_score(self, O):
+        return torch.mean(O, 1)
+
 
     def train(self, epoch_nbr=100):
 
@@ -85,39 +82,21 @@ class Trainer():
             train_aloss, train_oa, train_aa = self.apply(epoch, training=True)
             # TEST
             self.net.eval()
+            self.net.eval()
             with torch.no_grad():
-                test_aloss, test_oa, test_aa,  test_aauc, test_oauc, cm = self.apply(epoch, training=False)
-            # UPDATE LEARNING RATE
-            self.scheduler.step()
-            # SAVE NETWORK
+                test_auc, roc, self.outputs = self.apply(epoch, training=False)
+                self.rocs.append(roc)
+                self.aucs.append(float(test_auc))
+            # save network
             torch.save(self.net.state_dict(), os.path.join(self.save_dir, "state_dict.pth"))
-            # WRITE IN LOG FILE
-            f.write(str(epoch)+",")
-            f.write(train_aloss+",")
-            f.write(train_oa+",")
-            f.write(train_aa+",")
-            f.write(test_aloss+",")
-            f.write(test_oa+",")
-            f.write(test_aa+",")
-            f.write(test_oauc+"\n")
+            # write the logs
+            f.write(str(epoch) + ",")
+            f.write(train_aloss + ",")
+            f.write(test_auc + "\n")
             f.flush()
 
+        self.scheduler.step()
         f.close()
-
-        # saving confusion matrix in text format and as heatmap image
-        # ___________________________________________________________
-        print(os.getcwd())
-        os.makedirs(self.save_dir, exist_ok=True)
-        np.set_printoptions(threshold=sys.maxsize)
-        auc_file = open(os.path.join(self.save_dir, "confusion.txt"), "w")
-        auc_file.write(str(cm))
-        auc_file.close()
-        plt.figure(figsize=(30, 20))
-        cm_sum = cm.sum(axis=1)
-        cm_norm = cm / cm_sum[:, np.newaxis]
-        ax = sns.heatmap(cm_norm, fmt="d")
-        ax.figure.savefig(os.path.join(self.save_dir, "confusion.png"))
-        np.set_printoptions(threshold=1000)
 
     def apply(self, epoch, training=False):
 
@@ -140,22 +119,22 @@ class Trainer():
         #
         if training:
             t = tqdm(self.train_loader, desc="Epoch " + str(epoch), ncols=130)
-            for pts, features, targets, indices in t:
+            for pts, features, _ , target_transform, indices in t:
                 if self.config['cuda']:
                     features = features.cuda()
+                    target_transform = target_transform.cuda()
                     pts = pts.cuda()
-                    targets = targets.cuda()
                 self.optimizer.zero_grad()
                 # FORWARD
                 outputs = self.net(features, pts)
-                targets = targets.view(-1)
+                target_transform = target_transform.view(-1)
                 # BACKWARD STEP
-                loss = F.cross_entropy(outputs, targets)
+                loss = F.cross_entropy(outputs, target_transform)
                 loss.backward()
                 self.optimizer.step()
                 # METRICS IN TQDM PROGRESS BAR
                 predicted_class = np.argmax(outputs.cpu().detach().numpy(), axis=1)
-                target_np = targets.cpu().numpy()
+                target_np = target_transform.cpu().numpy()
                 cm_ = confusion_matrix(target_np.ravel(), predicted_class.ravel(), labels=list(range(self.N_LABELS)))
                 cm += cm_
                 error += loss.item()
@@ -175,53 +154,32 @@ class Trainer():
         #
         else:
             times_list = []
-            predictions = np.zeros((self.test_data.shape[0], self.N_LABELS), dtype=float)
+            anomaly_scores = np.zeros((self.test_data.shape[0], self.N_LABELS), dtype=float)
             t = tqdm(self.test_loader, desc="  Test " + str(epoch), ncols=100)
-            for pts, features, targets, indices in t:
+            for pts, features, targets, targets_transform, indices in t:
                 if self.config['cuda']:
                     features = features.cuda()
+                    # target_transform = targets_transform.cuda()
                     pts = pts.cuda()
-                    targets = targets.cuda()
+                    # targets = targets.cuda()
                 # FEEDING INPUT
-                then = time.time()
                 outputs = self.net(features, pts)
-                elapsed = time.time() - then
-                times_list.append(elapsed*1000)
-                targets = targets.view(-1)
-                # COMPUTING LOSS FOR BATCH
-                loss = F.cross_entropy(outputs, targets)
-                outputs_np = outputs.cpu().detach().numpy()
+                # COMPUTE ANOMALY SCORE
+                outputs = outputs.view(-1, self.N_LABELS)
+                batch_scores = 1 - self.normality_score(outputs)
+
+                batch_scores = batch_scores.cpu().detach().numpy()
                 for i in range(indices.size(0)):
-                    predictions[indices[i]] += outputs_np[i]
-                # UPDATING EPOCH ERROR
-                error += loss.item()
-                # Updating metrics in tqdm progress bar
-                if self.config['ntree'] == 1:
-                    pred_labels = np.argmax(outputs_np, axis=1)
-                    targets_np = targets.cpu().numpy()
-                    cm_ = confusion_matrix(targets.cpu().numpy(), pred_labels, labels=list(range(self.N_LABELS)))
-                    cm += cm_
-                    oa = "{:.5f}".format(metrics.stats_overall_accuracy(cm))
-                    aa = "{:.5f}".format(metrics.stats_accuracy_per_class(cm)[0])
-                    aiou = "{:.5f}".format(metrics.stats_iou_per_class(cm)[0])
-                    aloss = "{:.5e}".format(error / cm.sum())
-                    t.set_postfix(OA=oa, AA=aa, AIOU=aiou, ALoss=aloss)
+                    anomaly_scores[indices[i]] += batch_scores[i]
 
-            print("mean time for batch: {:.5f} ms".format(np.mean(times_list)))
-            # COMPUTING EPOCH METRICS
-            predicted_classes = np.argmax(predictions, axis=1)
-            scores_np = predictions - np.expand_dims(np.min(predictions, axis=1), axis=1)
-            scores_np = scores_np / np.expand_dims(np.max(scores_np, axis=1), axis=1)
-            scores_np = scores_np / np.expand_dims(scores_np.sum(axis=1), axis=1)
-            cm = confusion_matrix(self.test_labels, predicted_classes, labels=list(range(self.N_LABELS)))
-            oa = "{:.5f}".format(metrics.stats_overall_accuracy(cm))
-            aa = "{:.5f}".format(metrics.stats_accuracy_per_class(cm)[0])
-            aloss = "{:.5e}".format(error / cm.sum())
-            aauc = "{:.5f}".format(metrics.roc_auc_score(self.test_labels.squeeze(), scores_np, average="weighted", multi_class="ovo", labels=list(range(self.N_LABELS))))
-            oauc = "{:.5f}".format(metrics.roc_auc_score(self.test_labels.squeeze(), scores_np, average="macro", multi_class="ovo", labels=list(range(self.N_LABELS))))
-            print("Predictions", "loss", aloss, "OA", oa, "AA", aa, "AAUC", aauc, "OAUC", oauc)
-
-            return aloss, oa, aa, aauc, oauc, cm
+            auc = "{:.4f}".format(metrics.roc_auc_score(self.test_labels, anomaly_scores))
+            print("Predictions", "AUC", auc)
+            # "AA", aa,
+            # "IOU", aiou,
+            # "normAcc", normAcc,
+            # "anomAcc", anomAcc)
+            roc_fpr, roc_tpr, roc_thr = metrics.roc_curve(self.test_labels, anomaly_scores)
+            return auc, [roc_fpr, roc_tpr, roc_thr], anomaly_scores
 
     def count_parameters(self, model):
         parameters = model.parameters()

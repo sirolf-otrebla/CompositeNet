@@ -11,7 +11,7 @@ from sklearn import svm
 
 
 
-GOOD_PATH = "../data/shapenet_GOOD_4"
+GOOD_PATH = "../data/shapenet_scannet_GOOD_4_512pts"
 
 TRAIN_GOOD = os.path.join(GOOD_PATH, "train")
 TEST_GOOD = os.path.join(GOOD_PATH, "test")
@@ -28,13 +28,16 @@ parameters = {"positive penalty": 0.9,
               "kernel": kernelList.get("1"),
               "option": {"display": 'off'}}
 
-normal_clss = [31,33]
+#normal_clss = [0, 5, 9, 13, 14, 18, 31, 33, 45, 48, 50]
+normal_clss = [4,7,11,17,37,45,48]
 repetitions = 10
 
 if __name__ == '__main__':
     for i in normal_clss:
         auc_list = []
         roc_list = []
+        ANOMALIES = [x for x in range(0,55)]
+        ANOMALIES.remove(i)
         for j in range(0,repetitions):
             NORMAL_CLASS = [i]
             train_data = []
@@ -48,8 +51,8 @@ if __name__ == '__main__':
 
             test_data = []
             test_label = []
-            ANOMALIES = [x for x in range(0,55)] #31 microphones
-            ANOMALIES.remove(NORMAL_CLASS[0])
+#            ANOMALIES = [4,7,11,17,37, 45, 48] #[x for x in range(0,55)] #31 microphones
+
             for cls in NORMAL_CLASS + ANOMALIES:
                 read_dir = os.path.join(TEST_GOOD, str(cls))
                 for pc in os.listdir(read_dir):
@@ -67,14 +70,14 @@ if __name__ == '__main__':
             np_test_data = np.array(test_data)
             np_test_label = np.array(test_label)
             number_of_rows = np_test_data.shape[0]
-            random_indices = np.random.choice(number_of_rows, size=1500, replace=False)
+            random_indices = np.random.choice(number_of_rows, size=1000, replace=False)
             np_test_data = np_test_data[random_indices, :]
             np_test_label = np_test_label[random_indices]
 
             #clf = svm.OneClassSVM(nu=0.01, kernel="rbf", gamma=1e-4)
-            clf = svm.OneClassSVM(nu=0.01, kernel="poly", degree=4)
+            #clf = svm.OneClassSVM(nu=0.01, kernel="poly", degree=4)
             #clf = svm.OneClassSVM(nu=0.01, kernel="linear")
-            #clf = IsolationForest(contamination=0, n_estimators=100)
+            clf = IsolationForest(contamination=0.15, n_estimators=50)
             #svdd = SVDD(parameters)
             #svdd.train(np_train_data, np.zeros((np_train_data.shape[0],1)))
             clf.fit(np_train_data)
@@ -103,7 +106,7 @@ if __name__ == '__main__':
         plt.xlabel('False Positive Rate', fontsize=24)
         plt.legend(loc="lower right", prop={'size': 14})
         plt.title('ROC curve for class %d' % i)
-        plt.savefig("./roc_svm_poly_"+str(i)+".png")
+        plt.savefig("./roc_ifor_Shapenet_mixed_4_512pts"+str(i)+".png")
         #plt.show()
     # plt.axes().set_aspect('equal', 'datalim')
     # plt.savefig(os.path.join(folderName, str(normal_class) + "_roc.png"))
