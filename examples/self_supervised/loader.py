@@ -43,21 +43,21 @@ cfg_pool = [
         "center_fixed": True,                                           # the trainer does not update the center's position
         "soft_bound": False,                                            # Choose between One-Class or Soft-Bound Deep SVDD. In the paper, we employed One-Class Deep SVDD
         #"output_dimension": 64,  # 128,                                 # dimension of the Deep SVDD output sphere
-        "warm_up_n_epochs": 15,                                         # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
+        "warm_up_n_epochs": 8,                                         # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
         "noise_reg": True,                                              # adds random noise to the loss in order to prevent mode collapse
 
         # EXPERIMENT PARAMETERS
     #########################################
 
         "rootdir": "./data/shapenet",                                   # dataset's directory
-        "savedir": "./exp_selfSupervised_1",           # directory where you want to save the output of the experiment
-        "classes": [0, 5, 8, 13, 14, 18, 31, 33, 45, 48, 50],  #earphone 20 # classes to be tested
+        "savedir": "./exp_selfSupervised_2",           # directory where you want to save the output of the experiment
+        "classes": [0, 14, 48, 50], #earphone 20 # classes to be tested
         "anomalies" : None,                                          # classes to be used as Anomalies. if None, all non_normal classes are used
-        "repetitions" : 10,                                             # how many runs for each class
-        "epoch_nbr": 20,                                                # training epochs
+        "repetitions" : 1,                                             # how many runs for each class
+        "epoch_nbr": 10,                                                # training epochs
         "ntree" : 1,
         "cuda" : True,                                                  # use Cuda or not
-        "schedule": [30, 60, 90],  # learning rate schedule
+        "schedule": [4,6,8],  # learning rate schedule
 
         # OTHER PARAMETERS
     #########################################

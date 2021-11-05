@@ -34,6 +34,7 @@ class Trainer():
         self.config = config
         self.softmax = nn.Softmax(dim=1)
         config["n_parameters"] = self.count_parameters(net)
+        self.warm_up_n_epochs = config["warm_up_n_epochs"]
         # define the save directory
         if folderName == None:
             time_string = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
@@ -86,12 +87,15 @@ class Trainer():
             # TEST
             self.net.eval()
             self.net.eval()
-            with torch.no_grad():
-                test_auc, roc, self.outputs = self.apply(epoch, training=False)
-                self.rocs.append(roc)
-                self.aucs.append(float(test_auc))
-            # save network
-            torch.save(self.net.state_dict(), os.path.join(self.save_dir, "state_dict.pth"))
+            if (epoch >= self.warm_up_n_epochs):
+                with torch.no_grad():
+                    test_auc, roc, self.outputs = self.apply(epoch, training=False)
+                    self.rocs.append(roc)
+                    self.aucs.append(float(test_auc))
+                # save network
+                torch.save(self.net.state_dict(), os.path.join(self.save_dir, "state_dict.pth"))
+            else:
+                test_auc = "NaN"
             # write the logs
             f.write(str(epoch) + ",")
             f.write(train_aloss + ",")
