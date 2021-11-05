@@ -189,9 +189,9 @@ class PointCloudFileLists(torch.utils.data.Dataset):
         rotation_label = index % self.num_iter_per_shape
 
         R = self.SS_rotations[ rotation_label ]
-        rotated_pts = np.sum(np.expand_dims(pts, 2) * R, axis=1)
+        #rotated_pts = np.sum(np.expand_dims(pts, 2) * R, axis=1)
 
-        return rotated_pts.astype(np.float32), features.astype(np.float32), int(target), rotation_label, index_
+        return pts.astype(np.float32), features.astype(np.float32), R.astype(np.float32), int(target), rotation_label, index_
 
     def __len__(self):
         """Length."""

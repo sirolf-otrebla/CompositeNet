@@ -39,7 +39,11 @@ class Trainer():
         if folderName == None:
             time_string = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
             folderName = "{}_bs{:02d}_pts{}_{}".format(config['architecture'], config['batchsize'], config['npoints'], time_string)
-        self.save_dir = os.path.join(config['savedir'], folderName)
+        # self.save_dir = os.path.join(config['savedir'], folderName)
+        time_string = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+        self.save_dir = os.path.join(
+            folderName,
+            "Experiment_{}".format(time_string))
         # setting stuff for trainer
         if config['cuda']:
             net.cuda()
@@ -126,13 +130,15 @@ class Trainer():
         #
         if training:
             t = tqdm(self.train_loader, desc="Epoch " + str(epoch), ncols=130)
-            for pts, features, _ , target_transform, indices in t:
+            for pts, features, Rs, _ , target_transform, indices in t:
                 if self.config['cuda']:
+                    Rs = Rs.cuda()
                     features = features.cuda()
                     target_transform = target_transform.cuda()
                     pts = pts.cuda()
                 self.optimizer.zero_grad()
                 # FORWARD
+                pts = torch.bmm(pts, pts, Rs)
                 outputs = self.net(features, pts)
                 target_transform = target_transform.view(-1)
                 # BACKWARD STEP
@@ -163,13 +169,15 @@ class Trainer():
             times_list = []
             anomaly_scores = np.zeros((self.test_data.shape[0]), dtype=float)
             t = tqdm(self.test_loader, desc="  Test " + str(epoch), ncols=100)
-            for pts, features, targets, targets_transform, indices in t:
+            for pts, features, Rs, targets, targets_transform, indices in t:
                 if self.config['cuda']:
                     features = features.cuda()
+                    Rs = Rs.cuda()
                     # target_transform = targets_transform.cuda()
                     pts = pts.cuda()
                     # targets = targets.cuda()
                 # FEEDING INPUT
+                pts = torch.bmm(pts, pts, Rs)
                 outputs = self.net(features, pts)
                 outputs = self.softmax(outputs)
                 # [N * N_T, N_T ] --> [ N, N_T, N_T ]
