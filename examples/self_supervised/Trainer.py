@@ -71,8 +71,10 @@ class Trainer():
         return logFile
 
     def normality_score(self, O):
-        return torch.mean(O, 1)
-
+        # [N, N_T, N_T]
+        diags = torch.diagonal(O, offset=0, dim1=1, dim2=2)
+        means = torch.mean(diags, 1)
+        return means
 
     def train(self, epoch_nbr=100):
 
@@ -165,15 +167,14 @@ class Trainer():
                     # targets = targets.cuda()
                 # FEEDING INPUT
                 outputs = self.net(features, pts)
-                #outputs = self.softmax(outputs)
-                outputs, __ = torch.max(outputs, 1)
-                # COMPUTE ANOMALY SCORE
-                outputs = outputs.view(-1, self.N_LABELS)
-                batch_scores = 1 - self.normality_score(outputs)
-
+                outputs = self.softmax(outputs)
+                # [N * N_T, N_T ] --> [ N, N_T, N_T ]
+                outputs = outputs.view(-1, self.N_LABELS, self.N_LABELS)
+                batch_scores = - self.normality_score(outputs)
                 batch_scores = batch_scores.cpu().detach().numpy()
                 for i in range(0, indices.size(0), self.N_LABELS):
-                    anomaly_scores[indices[i]] += batch_scores[i % self.N_LABELS]
+
+                    anomaly_scores[indices[i]] += batch_scores[i // self.N_LABELS]
 
             print(self.test_labels)
             print(anomaly_scores.shape)

@@ -29,10 +29,10 @@ class SelfSupervisedDataContainer():
             create_3D_rotations(45),
             create_3D_rotations(90),
             create_3D_rotations(135),
-            create_3D_rotations(180),
-            create_3D_rotations(225),
-            create_3D_rotations(270),
-            create_3D_rotations(315),
+            create_3D_rotations(-150),
+            create_3D_rotations(-120),
+            create_3D_rotations(-60),
+            create_3D_rotations(-30),
         ]
 
         self.normal_class_list = normal_class_list
