@@ -27,11 +27,11 @@ cfg_pool = [
         # ARCHITECTURE PARAMETERS
         #########################################
 
-        "pl": 8,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
+        "pl": 16,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
         "dropout": 0.5,
         "architecture": "CompositeNet",                                 # you can choose between CompositeNet and the original ConvPoint architecture
         "batchsize": 16,
-        "npoints": 512,
+        "npoints": 1024,
         "biases": False,                                                # remove biases through the network
 
         # DEEP SVDD PARAMETERS
@@ -42,7 +42,7 @@ cfg_pool = [
         "nu": .6,                                                       # used only in soft-bound SVDD as in the paper by Ruff et al. ignore it if using the One-Class loss
         "center_fixed": True,                                           # the trainer does not update the center's position
         "soft_bound": False,                                            # Choose between One-Class or Soft-Bound Deep SVDD. In the paper, we employed One-Class Deep SVDD
-        "output_dimension": 64,  # 128,                                 # dimension of the Deep SVDD output sphere
+        #"output_dimension": 64,  # 128,                                 # dimension of the Deep SVDD output sphere
         "warm_up_n_epochs": 15,                                         # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
         "noise_reg": True,                                              # adds random noise to the loss in order to prevent mode collapse
 
@@ -52,7 +52,7 @@ cfg_pool = [
         "rootdir": "./data/shapenet",                                   # dataset's directory
         "savedir": "./exp_selfSupervised_1",           # directory where you want to save the output of the experiment
         "classes": [0, 5, 8, 13, 14, 18, 31, 33, 45, 48, 50],  #earphone 20 # classes to be tested
-        "anomalies" : [1,2,3],                                          # classes to be used as Anomalies. if None, all non_normal classes are used
+        "anomalies" : None,                                          # classes to be used as Anomalies. if None, all non_normal classes are used
         "repetitions" : 10,                                             # how many runs for each class
         "epoch_nbr": 20,                                                # training epochs
         "ntree" : 1,
@@ -71,7 +71,7 @@ cfg_pool = [
 
 print(cuda.device_count())
 for d in range(cuda.device_count()):
-    if cuda.get_device_name(device(d)).startswith("Tesla"):
+    if cuda.get_device_name(device(d)).startswith("TITAN"):
         cuda.set_device(d)
         print(cuda.current_device(), cuda.get_device_name(device(d)))
 

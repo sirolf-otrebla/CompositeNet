@@ -296,7 +296,7 @@ def create_3D_rotations(theta):
     :return: float32[N, 3, 3]
     """
     c, s = np.cos(theta), np.sin(theta)
-    R = np.array([[c, -s, 0], [s, c, 0], [1, 0, 0]], dtype=np.float32)
+    R = np.array([[1,0,0], [c, -s, 0], [s, c, 0], ], dtype=np.float32)
     return R
 """
 old

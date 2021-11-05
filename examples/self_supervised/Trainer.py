@@ -32,6 +32,7 @@ class Trainer():
         self.N_LABELS = len(dataContainer.getTransformationList())
         self.labels_list = dataContainer.getTransformationList()
         self.config = config
+        self.softmax = nn.Softmax(dim=1)
         config["n_parameters"] = self.count_parameters(net)
         # define the save directory
         if folderName == None:
@@ -154,7 +155,7 @@ class Trainer():
         #
         else:
             times_list = []
-            anomaly_scores = np.zeros((self.test_data.shape[0], self.N_LABELS), dtype=float)
+            anomaly_scores = np.zeros((self.test_data.shape[0]), dtype=float)
             t = tqdm(self.test_loader, desc="  Test " + str(epoch), ncols=100)
             for pts, features, targets, targets_transform, indices in t:
                 if self.config['cuda']:
@@ -164,14 +165,18 @@ class Trainer():
                     # targets = targets.cuda()
                 # FEEDING INPUT
                 outputs = self.net(features, pts)
+                #outputs = self.softmax(outputs)
+                outputs, __ = torch.max(outputs, 1)
                 # COMPUTE ANOMALY SCORE
                 outputs = outputs.view(-1, self.N_LABELS)
                 batch_scores = 1 - self.normality_score(outputs)
 
                 batch_scores = batch_scores.cpu().detach().numpy()
-                for i in range(indices.size(0)):
-                    anomaly_scores[indices[i]] += batch_scores[i]
+                for i in range(0, indices.size(0), self.N_LABELS):
+                    anomaly_scores[indices[i]] += batch_scores[i % self.N_LABELS]
 
+            print(self.test_labels)
+            print(anomaly_scores.shape)
             auc = "{:.4f}".format(metrics.roc_auc_score(self.test_labels, anomaly_scores))
             print("Predictions", "AUC", auc)
             # "AA", aa,
