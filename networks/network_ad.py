@@ -60,9 +60,7 @@ class ADCompositeNet(nn.Module):
         layers = [
         self.cv1.getSpatialParams(),
         self.cv3.getSpatialParams(),
-        self.cv4.getSpatialParams(),
-        self.cv5.getSpatialParams(),
-        self.cv6.getSpatialParams() ]
+        self.cv4.getSpatialParams()]
 
         params = [i for l in layers for i in l]
         return params
@@ -98,8 +96,8 @@ class ADConvPoint(nn.Module):
         self.fcout2 = nn.Linear(output_channels, 20, bias=False) #20
         # batchnorms
         self.bn1 = nn.BatchNorm1d(pl, eps=1e-4, affine=False, track_running_stats=False)
-        self.bn3 = nn.BatchNorm1d(2 * pl, eps=1e-4, affine=False, track_running_stats=False)
-        self.bn4 = nn.BatchNorm1d(4 * pl, eps=1e-4, affine=False, track_running_stats=False)
+        self.bn3 = nn.BatchNorm1d(3 * pl, eps=1e-4, affine=False, track_running_stats=False)
+        self.bn4 = nn.BatchNorm1d(6 * pl, eps=1e-4, affine=False, track_running_stats=False)
 
 
         self.dropout = nn.Dropout(config["dropout"])
