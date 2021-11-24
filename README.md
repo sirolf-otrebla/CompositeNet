@@ -14,7 +14,7 @@ https://github.com/aboulch/ConvPoint
 
 The code was tested on Manjaro GNU/Linux "Nibia" 20.2.1, using a Conda environment with the following packages installed:
 
-- CUDAtoolkit 10.2.89
+- CUDAtoolkit 11.4
 - CUDNN 7.6.5
 - Cython 0.29.21
 - Pytorch 1.9.0
@@ -27,8 +27,8 @@ The code was tested on Manjaro GNU/Linux "Nibia" 20.2.1, using a Conda environme
 
 All these dependencies can be installed via `conda install <package>` when using a conda environment. The testing hardware configuration is the following:
 
-- AMD® Ryzen 7 3800x 8-core processor 
-- Nvidia GTX 1080 w/ 8GiB VRAM
+- AMD Ryzen Threadripper 1950X 16-Core Processor
+- NVIDIA RTX A6000 w/ 48GiB VRAM
 
 The code was developed to be run over a CUDA GPU. Note that in some older video cards issues may arise during training.
 
@@ -63,21 +63,47 @@ Simply download and unzip them in the `./data` folder.
 
 ### MultiClass Classification
 
-you can run a multiclass classification by executing `./examples/multiclass/loader.py`. For your convenience,
-you can also run the experiment by executing `launch_MC.sh` inside the main folder.
+you can run a multiclass classification by executing `./examples/multiclass/loader.py`.
 
 the experiment's configuration is contained inside a dictionary object at the start of `./examples/multiclass/loader.py`.
 You can find a description of every configurable parameter in the comments.
 
-You can add multiple configurations to `loader.py`, in order to execute several experiments in a row.
+You can load an external configuration or use the example one already in the code. To do that, simply write your configuration in a JSON file and load it by adding its path as CLI argument. For example:
 
-### Anomaly detection
+`python ./examples/multiclass/loader.py myConfig.json ` 
 
-you can run an anomaly detection experiment by executing `./examples/adetection/loader.py`. For your convenience,
-you can also run the experiment by executing `launch_AD.sh` inside the main folder.
+You can also fed loader.py with more than one configuration at a time: they will be exectued sequentially.
 
-the experiment's configuration is contained inside a dictionary object at the start of `./examples/adetection/loader.py`.
+`python ./examples/multiclass/loader.py ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
+
+### Deep SVDD
+
+you can run a Deep SVDD experiment by executing `./examples/deep_svdd/loader.py`.
+
+the experiment's configuration is contained inside a dictionary object at the start of `./examples/deep_svdd/loader.py`.
 You can find a description of every configurable parameter in the comments.
 
-You can add multiple configurations to `loader.py`, in order to execute several experiments in a row.
+You can load an external configuration or use the example one already in the code. To do that, simply write your configuration in a JSON file and load it by adding its path as CLI argument. For example:
+
+`python ./examples/multiclass/loader.py myConfig.json ` 
+
+You can also fed loader.py with more than one configuration at a time: they will be exectued sequentially.
+
+`python ./examples/multiclass/loader.py ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
+
+### Self-Supervised AD
+
+you can run a Self-Supervised AD experiment by executing `./examples/self_supervised/loader.py`. For your convenience,
+you can also run the experiment by executing `launch_AD.sh` inside the main folder.
+
+the experiment's configuration is contained inside a dictionary object at the start of `./examples/self_supervised/loader.py`.
+You can find a description of every configurable parameter in the comments.
+
+You can load an external configuration or use the example one already in the code. To do that, simply write your configuration in a JSON file and load it by adding its path as CLI argument. For example:
+
+`python ./examples/multiclass/loader.py myConfig.json ` 
+
+You can also fed loader.py with more than one configuration at a time: they will be exectued sequentially.
+
+`python ./examples/multiclass/loader.py ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
 
