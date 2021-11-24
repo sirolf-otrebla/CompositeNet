@@ -59,6 +59,11 @@ https://github.com/AnTao97/PointCloudDatasets
 
 Simply download and unzip them in the `./data` folder.
 
+Unfortunately, its licence prevents us or others to redistribute the *ScanNet* dataset. If you wan to run experiments on it, you will have to extract the shapes directly from the original segmentation dataset. You can find more here:'
+
+http://www.scan-net.org/
+
+
 ## Examples
 
 ### MultiClass Classification
