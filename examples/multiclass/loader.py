@@ -25,7 +25,7 @@ cfg_pool = [
         # ARCHITECTURE PARAMETERS
         #########################################
 
-        "pl": 64,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
+        "pl": 64,                                                        # called J_0 in the paper, decides the number of outgoing features from each network's layer
         "dropout": 0.33,                                                 # you can choose between CompositeNet and the original ConvPoint architecture
         "architecture": "ConvPoint",
         "TL_path": None,  # "./save/AD_TL/state_dict.pth",
@@ -36,7 +36,7 @@ cfg_pool = [
         # EXPERIMENT PARAMETERS
         #########################################
 
-        "rootdir": "./data/scannet_more",                                # dataset's directory
+        "rootdir": "./data/ShapeNetCore_hdf5_2048",                                # dataset's directory
         "savedir": "./saved_reults/myExp",                               # directory where you want to save the output of the experiment
                                                                          # if testing, this directory has to contain a
                                                                          # network state named "state_dict.pth"

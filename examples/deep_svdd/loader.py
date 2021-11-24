@@ -34,7 +34,7 @@ cfg_pool = [
         # ARCHITECTURE PARAMETERS
         #########################################
 
-        "pl": 8,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
+        "pl": 8,                                                        # called J_0  in the paper, decides the number of outgoing features from each network's layer
         "dropout": 0.5,
         "architecture": "CompositeNet",                                 # you can choose between CompositeNet and the original ConvPoint architecture
         "batchsize": 16,
@@ -56,7 +56,7 @@ cfg_pool = [
         # EXPERIMENT PARAMETERS
     #########################################
 
-        "rootdir": "./data/shapenet",                                   # dataset's directory
+        "rootdir": "./data/ShapeNetCore_hdf5_2048",                                   # dataset's directory
         "savedir": "./exp_Aggregate_outDim64_Noise_hardLoss",           # directory where you want to save the output of the experiment
         "classes": [0,5,8,13,14,18,31,33,45,48,50],                     # classes used as training set
         "anomalies" : [1,2,3],                                          # classes  used as Anomalies. if None, all non_normal classes are used
