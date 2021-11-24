@@ -14,18 +14,18 @@ config = [
         # COMPOSITE LAYER PARAMETERS
         #########################################
 
-        "n_centers": 56,                                                 #  number of centers inside the spatial function
+        "n_centers": 256,                                                 #  number of centers inside the spatial function
         "spatial_function_dimension": 16,                                # spatial function's output dimension
         "neighbours": 32,                                                # cardinality of each neighbourhood
         "spatial": "RBFN-norelu",                                        # kind of spatial function used. you can find some already implemented
-        "semantic": "MLP",                                         # kind of semantic function used. You can choose between aggregate or linear (convolutional)
+        "semantic": "aggregate",                                         # kind of semantic function used. You can choose between aggregate or linear (convolutional)
 
         # ARCHITECTURE PARAMETERS
         #########################################
 
         "pl": 64,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
         "dropout": 0.33,                                                 # you can choose between CompositeNet and the original ConvPoint architecture
-        "architecture": "CompositeNet",
+        "architecture": "ConvPoint",
         "TL_path": None,  # "./save/AD_TL/state_dict.pth",
         "batchsize": 16,
         "npoints": 1024,
@@ -34,15 +34,15 @@ config = [
         # EXPERIMENT PARAMETERS
         #########################################
 
-        "rootdir": "./data/scannet",                        # dataset's directory
-        "savedir": "./saved_reults/MC_scannet_aggregate",                                    # directory where you want to save the output of the experiment
+        "rootdir": "./data/scannet_more",                        # dataset's directory
+        "savedir": "./saved_reults/tempi",                                    # directory where you want to save the output of the experiment
                                                                          # if testing, this directory has to contain a
                                                                          # network state named "state_dict.pth"
-        "epochs": 100,
+        "epochs": 200,
         "ntree": 1,
         "cuda": True,
         "test": False,
-        "schedule": [30, 60, 90],                                        # learning rate schedule
+        "schedule": [50,100,150], #[20,40,50],                                        # learning rate schedule
 
         # OTHER PARAMETERS
         #########################################

@@ -56,10 +56,10 @@ cfg_pool = [
 
         "rootdir": "./data/shapenet",                                   # dataset's directory
         "savedir": "./exp_Aggregate_outDim64_Noise_hardLoss",           # directory where you want to save the output of the experiment
-        "classes": [0, 5, 8, 13, 14, 18, 31, 33, 45, 48, 50],  #earphone 20 # classes to be tested
+        "classes": [x for x in range(55)],  #earphone 20 # classes to be tested
         "anomalies" : [1,2,3],                                          # classes to be used as Anomalies. if None, all non_normal classes are used
         "repetitions" : 10,                                             # how many runs for each class
-        "epoch_nbr": 10,                                                # training epochs
+        "epoch_nbr": 0,                                                # training epochs
         "ntree" : 1,
         "cuda" : True,                                                  # use Cuda or not
 

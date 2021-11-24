@@ -12,7 +12,7 @@ class MCConvPoint(nn.Module):
     def __init__(self, input_channels, output_channels, dimension=3):
         super(MCConvPoint, self).__init__()
         
-        n_centers = 16
+        n_centers = 256
         pl = 64
 
         # convolutions

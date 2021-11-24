@@ -53,6 +53,7 @@ class ADModelNetDataContainer():
                         data.append(f["data"][i, :])
                         if "normal" in keys:
                             normal.append(f["normal"][i, :])
+            print("training samples: %d" % len(labels))
         else:
             for filename in filenames:
                 f = h5py.File(filename, 'r')
@@ -84,7 +85,6 @@ class ADModelNetDataContainer():
             normals = None
         else:
             normals = np.array(normal)
-
         return data, labels, normals
 
     def getLabels(self):

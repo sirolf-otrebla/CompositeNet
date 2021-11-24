@@ -18,8 +18,8 @@ cfg_pool = [
         # COMPOSITE LAYER PARAMETERS
         #########################################
 
-        "n_centers": 56,                                                #  number of centers inside the spatial function
-        "spatial_function_dimension": 14,                               # spatial function's output dimension
+        "n_centers": 128,                                                #  number of centers inside the spatial function
+        "spatial_function_dimension": 32,                               # spatial function's output dimension
         "neighbours": 32,                                               # cardinality of each neighbourhood
         "spatial": "RBFN-norelu",                                       # kind of spatial function used. you can find some already implemented
         "semantic": "aggregate",                                        # kind of semantic function used. You can choose between aggregate or linear (convolutional)
@@ -27,10 +27,10 @@ cfg_pool = [
         # ARCHITECTURE PARAMETERS
         #########################################
 
-        "pl": 16,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
+        "pl": 32,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
         "dropout": 0.5,
         "architecture": "CompositeNet",                                 # you can choose between CompositeNet and the original ConvPoint architecture
-        "batchsize": 16,
+        "batchsize": 4,
         "npoints": 1024,
         "biases": False,                                                # remove biases through the network
 
@@ -50,8 +50,8 @@ cfg_pool = [
     #########################################
 
         "rootdir": "./data/shapenet",                                   # dataset's directory
-        "savedir": "./exp_selfSupervised_2",           # directory where you want to save the output of the experiment
-        "classes": [0, 14, 48, 50], #earphone 20 # classes to be tested
+        "savedir": "./exp_selfSupervised_shapenet_aggregate32_pl32_c128",           # directory where you want to save the output of the experiment
+        "classes": [0,5,8,13,14,18,31,33,45,48,50], #[x for x in range(17) ], #earphone 20 # classes to be tested
         "anomalies" : None,                                          # classes to be used as Anomalies. if None, all non_normal classes are used
         "repetitions" : 1,                                             # how many runs for each class
         "epoch_nbr": 10,                                                # training epochs

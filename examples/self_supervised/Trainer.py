@@ -138,7 +138,7 @@ class Trainer():
                     pts = pts.cuda()
                 self.optimizer.zero_grad()
                 # FORWARD
-                pts = torch.bmm(pts, pts, Rs)
+                pts = torch.bmm(pts, Rs)
                 outputs = self.net(features, pts)
                 target_transform = target_transform.view(-1)
                 # BACKWARD STEP
@@ -177,7 +177,7 @@ class Trainer():
                     pts = pts.cuda()
                     # targets = targets.cuda()
                 # FEEDING INPUT
-                pts = torch.bmm(pts, pts, Rs)
+                pts = torch.bmm(pts, Rs)
                 outputs = self.net(features, pts)
                 outputs = self.softmax(outputs)
                 # [N * N_T, N_T ] --> [ N, N_T, N_T ]

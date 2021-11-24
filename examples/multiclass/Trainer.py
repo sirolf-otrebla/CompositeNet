@@ -60,7 +60,7 @@ class Trainer():
         )
         self.test_data = dataContainer.getTestData()
         self.test_labels = dataContainer.getTestLabels()
-        self.optimizer = torch.optim.Adam(net.parameters(), lr=1e-4)
+        self.optimizer = torch.optim.NAdam(net.parameters(), lr=1e-3)
         self.scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, config["schedule"], gamma=0.1) # gamma=0.5 [20, 35, 50, 70], gamma=0.5 ) [30, 45, 75]
 
 
