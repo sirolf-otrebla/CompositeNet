@@ -70,45 +70,50 @@ http://www.scan-net.org/
 
 you can run a multiclass classification by executing `./examples/multiclass/loader.py`.
 
+`python3 -m examples.multiclass.loader `
+
 the experiment's configuration is contained inside a dictionary object at the start of `./examples/multiclass/loader.py`.
 You can find a description of every configurable parameter in the comments.
 
 You can load an external configuration or use the example one already in the code. To do that, simply write your configuration in a JSON file and load it by adding its path as CLI argument. For example:
 
-`python ./examples/multiclass/loader.py myConfig.json ` 
+`python3 -m examples.multiclass.loader myConfig.json ` 
 
 You can also fed loader.py with more than one configuration at a time: they will be exectued sequentially.
 
-`python ./examples/multiclass/loader.py ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
+` python3 -m examples.multiclass.loader ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
 
 ### Deep SVDD
 
 you can run a Deep SVDD experiment by executing `./examples/deep_svdd/loader.py`.
+
+`python3 -m examples.deep_svdd.loader `
 
 the experiment's configuration is contained inside a dictionary object at the start of `./examples/deep_svdd/loader.py`.
 You can find a description of every configurable parameter in the comments.
 
 You can load an external configuration or use the example one already in the code. To do that, simply write your configuration in a JSON file and load it by adding its path as CLI argument. For example:
 
-`python ./examples/deep_svdd/loader.py myConfig.json ` 
+`python3 -m examples.deep_svdd.loader myConfig.json ` 
 
 You can also fed loader.py with more than one configuration at a time: they will be exectued sequentially.
 
-`python ./examples/deep_svdd/loader.py ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
+` python3 -m examples.deep_svdd.loader ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
 
 ### Self-Supervised AD
 
 you can run a Self-Supervised AD experiment by executing `./examples/self_supervised/loader.py`. For your convenience,
-you can also run the experiment by executing `launch_AD.sh` inside the main folder.
+
+`python3 -m examples.self_supervised.loader `
 
 the experiment's configuration is contained inside a dictionary object at the start of `./examples/self_supervised/loader.py`.
 You can find a description of every configurable parameter in the comments.
 
 You can load an external configuration or use the example one already in the code. To do that, simply write your configuration in a JSON file and load it by adding its path as CLI argument. For example:
 
-`python ./examples/self_supervised/loader.py myConfig.json ` 
+` python3 -m examples.self_supervised.loader myConfig.json ` 
 
 You can also fed loader.py with more than one configuration at a time: they will be exectued sequentially.
 
-`python ./examples/self_supervised/loader.py ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
+` python3 -m examples.self_supervised.loadery ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
 
