@@ -76,7 +76,7 @@ cfg_pool = [
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Deep SVDD network for CompositeNet. You can load an external configuration or use the example one already in the code')
-    parser.add_argument('configs', metavar='C', nargs='+', required=False, default=None,
+    parser.add_argument('configs', metavar='C', nargs='*', required=False, default=None,
                         help='json path to desired network configuration. you can add more than one configuration and run them one after the other')
     args = parser.parse_args()
     if args.configs != None:
