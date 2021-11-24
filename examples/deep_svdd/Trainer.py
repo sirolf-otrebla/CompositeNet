@@ -3,7 +3,7 @@ sys.path.append('../../')
 
 # other imports
 import torch.utils.data
-from examples.adetection.dataContainer import *
+from examples.deep_svdd.dataContainer import *
 
 class modelBuilder():
 

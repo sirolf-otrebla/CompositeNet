@@ -3,6 +3,7 @@ from examples.self_supervised.dataContainer import *
 from matplotlib import pyplot as plt
 
 from examples.multiclass.dataContainer import *
+import json
 from torch import cuda, device
 
 cfg_pool = [
@@ -27,7 +28,7 @@ cfg_pool = [
         # ARCHITECTURE PARAMETERS
         #########################################
 
-        "pl": 32,                                                        # called omega in the paper, decides the number of outgoing features from each network's layer
+        "pl": 32,                                                       # called omega in the paper, decides the number of outgoing features from each network's layer
         "dropout": 0.5,
         "architecture": "CompositeNet",                                 # you can choose between CompositeNet and the original ConvPoint architecture
         "batchsize": 4,
@@ -42,8 +43,8 @@ cfg_pool = [
         "nu": .6,                                                       # used only in soft-bound SVDD as in the paper by Ruff et al. ignore it if using the One-Class loss
         "center_fixed": True,                                           # the trainer does not update the center's position
         "soft_bound": False,                                            # Choose between One-Class or Soft-Bound Deep SVDD. In the paper, we employed One-Class Deep SVDD
-        #"output_dimension": 64,  # 128,                                 # dimension of the Deep SVDD output sphere
-        "warm_up_n_epochs": 8,                                         # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
+        #"output_dimension": 64,  # 128,                                # dimension of the Deep SVDD output sphere
+        "warm_up_n_epochs": 8,                                          # in the first epochs, the network is not tested. If using soft-bound loss, the radius is not updated.
         "noise_reg": True,                                              # adds random noise to the loss in order to prevent mode collapse
 
         # EXPERIMENT PARAMETERS
@@ -51,9 +52,9 @@ cfg_pool = [
 
         "rootdir": "./data/shapenet",                                   # dataset's directory
         "savedir": "./exp_selfSupervised_shapenet_aggregate32_pl32_c128",           # directory where you want to save the output of the experiment
-        "classes": [0,5,8,13,14,18,31,33,45,48,50], #[x for x in range(17) ], #earphone 20 # classes to be tested
-        "anomalies" : None,                                          # classes to be used as Anomalies. if None, all non_normal classes are used
-        "repetitions" : 1,                                             # how many runs for each class
+        "classes": [0,5,8,13,14,18,31,33,45,48,50],                     #[x for x in range(17) ], #earphone 20 # classes to be tested
+        "anomalies" : None,                                             # classes to be used as Anomalies. if None, all non_normal classes are used
+        "repetitions" : 1,                                              # how many runs for each class
         "epoch_nbr": 10,                                                # training epochs
         "ntree" : 1,
         "cuda" : True,                                                  # use Cuda or not
@@ -68,18 +69,16 @@ cfg_pool = [
 ]
 
 
-
-print(cuda.device_count())
-for d in range(cuda.device_count()):
-    if cuda.get_device_name(device(d)).startswith("TITAN"):
-        cuda.set_device(d)
-        print(cuda.current_device(), cuda.get_device_name(device(d)))
-
-
 if __name__ == '__main__':
 
-    for c in cfg_pool:
+    parser = argparse.ArgumentParser(description='Self-supervised network for CompositeNet. You can load an external configuration or use the example one already in the code')
+    parser.add_argument('configs', metavar='C', nargs='+',
+                        help='json path to desired network configuration. you can add more than one configuration and run them one after the other')
+    args = parser.parse_args()
+    if args.configs != None:
+        cfg_pool = [ json.load(file) for file in [ open(path) for path in args.configs]]
 
+    for c in cfg_pool:
         #if c['cuda']:
         #    torch.backends.cudnn.benchmark = True
 

@@ -1,7 +1,9 @@
-from examples.adetection.Trainer import *
+from examples.deep_svdd.Trainer import *
 # import pptk # for vizualizing point clouds 
 import numpy as np
 import matplotlib.pyplot as plt
+import argparse
+import json
 
 #import imageio
 from scipy import misc
@@ -56,10 +58,10 @@ cfg_pool = [
 
         "rootdir": "./data/shapenet",                                   # dataset's directory
         "savedir": "./exp_Aggregate_outDim64_Noise_hardLoss",           # directory where you want to save the output of the experiment
-        "classes": [x for x in range(55)],  #earphone 20 # classes to be tested
-        "anomalies" : [1,2,3],                                          # classes to be used as Anomalies. if None, all non_normal classes are used
+        "classes": [0,5,8,13,14,18,31,33,45,48,50],                     # classes used as training set
+        "anomalies" : [1,2,3],                                          # classes  used as Anomalies. if None, all non_normal classes are used
         "repetitions" : 10,                                             # how many runs for each class
-        "epoch_nbr": 0,                                                # training epochs
+        "epoch_nbr": 0,                                                 # training epochs
         "ntree" : 1,
         "cuda" : True,                                                  # use Cuda or not
 
@@ -73,6 +75,12 @@ cfg_pool = [
 ]
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Deep SVDD network for CompositeNet. You can load an external configuration or use the example one already in the code')
+    parser.add_argument('configs', metavar='C', nargs='+',
+                        help='json path to desired network configuration. you can add more than one configuration and run them one after the other')
+    args = parser.parse_args()
+    if args.configs != None:
+        cfg_pool = [ json.load(file) for file in [ open(path) for path in args.configs]]
 
     for c in cfg_pool:
 

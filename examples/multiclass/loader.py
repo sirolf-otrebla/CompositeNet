@@ -1,8 +1,10 @@
 from examples.multiclass.Trainer import *
 from examples.multiclass.dataContainer import *
 from torch import cuda, device
+import argparse
+import json
 #from torch.profiler import profile, record_function, ProfilerActivity
-config = [
+cfg_pool = [
     {
 
         # PARAMETERS FOR FOURIER-TRAINED RBFs
@@ -14,7 +16,7 @@ config = [
         # COMPOSITE LAYER PARAMETERS
         #########################################
 
-        "n_centers": 256,                                                 #  number of centers inside the spatial function
+        "n_centers": 256,                                                #  number of centers inside the spatial function
         "spatial_function_dimension": 16,                                # spatial function's output dimension
         "neighbours": 32,                                                # cardinality of each neighbourhood
         "spatial": "RBFN-norelu",                                        # kind of spatial function used. you can find some already implemented
@@ -34,15 +36,15 @@ config = [
         # EXPERIMENT PARAMETERS
         #########################################
 
-        "rootdir": "./data/scannet_more",                        # dataset's directory
-        "savedir": "./saved_reults/tempi",                                    # directory where you want to save the output of the experiment
+        "rootdir": "./data/scannet_more",                                # dataset's directory
+        "savedir": "./saved_reults/myExp",                               # directory where you want to save the output of the experiment
                                                                          # if testing, this directory has to contain a
                                                                          # network state named "state_dict.pth"
         "epochs": 200,
         "ntree": 1,
         "cuda": True,
         "test": False,
-        "schedule": [50,100,150], #[20,40,50],                                        # learning rate schedule
+        "schedule": [50,100,150],                                        # learning rate schedule
 
         # OTHER PARAMETERS
         #########################################
@@ -51,18 +53,17 @@ config = [
 
     },
 ]
-
-
-print(cuda.device_count())
-for d in range(cuda.device_count()):
-    if cuda.get_device_name(device(d)).startswith("Tesla"):
-        cuda.set_device(d)
-
 print(cuda.current_device(), cuda.get_device_name(device(d)))
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Multiclass classification network for CompositeNet. You can load an external configuration or use the example one already in the code')
+    parser.add_argument('configs', metavar='C', nargs='+',
+                        help='json path to desired network configuration. you can add more than one configuration and run them one after the other')
+    args = parser.parse_args()
+    if args.configs != None:
+        cfg_pool = [ json.load(file) for file in [ open(path) for path in args.configs]]
 
-    for c in config:
+    for c in cfg_pool:
         dataset = ModelNetDataContainer(c["rootdir"])
         print("n_classes %d" % len(dataset.getLabels()))
         netFactory = modelBuilder(1, len(dataset.getLabels()))
