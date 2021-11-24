@@ -61,7 +61,7 @@ cfg_pool = [
         "classes": [0,5,8,13,14,18,31,33,45,48,50],                     # classes used as training set
         "anomalies" : [1,2,3],                                          # classes  used as Anomalies. if None, all non_normal classes are used
         "repetitions" : 10,                                             # how many runs for each class
-        "epoch_nbr": 0,                                                 # training epochs
+        "epoch_nbr": 10,                                                 # training epochs
         "ntree" : 1,
         "cuda" : True,                                                  # use Cuda or not
 
