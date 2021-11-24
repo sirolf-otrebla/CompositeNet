@@ -83,6 +83,7 @@ You can also fed loader.py with more than one configuration at a time: they will
 
 ` python3 -m examples.multiclass.loader ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
 
+The default configuration runs on *ShapeNetCore*, located at `./data/shapenetcorev2_hdf5_2048`.
 ### Deep SVDD
 
 you can run a Deep SVDD experiment by executing `./examples/deep_svdd/loader.py`.
@@ -99,6 +100,8 @@ You can load an external configuration or use the example one already in the cod
 You can also fed loader.py with more than one configuration at a time: they will be exectued sequentially.
 
 ` python3 -m examples.deep_svdd.loader ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
+
+The default configuration runs on *ShapeNetCore*, located at `./data/shapenetcorev2_hdf5_2048`.
 
 ### Self-Supervised AD
 
@@ -117,3 +120,4 @@ You can also fed loader.py with more than one configuration at a time: they will
 
 ` python3 -m examples.self_supervised.loadery ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
 
+The default configuration runs on *ShapeNetCore*, located at `./data/shapenetcorev2_hdf5_2048`.

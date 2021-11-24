@@ -50,7 +50,7 @@ cfg_pool = [
         # EXPERIMENT PARAMETERS
     #########################################
 
-        "rootdir": "./data/ShapeNetCore_hdf5_2048",                     # dataset's directory
+        "rootdir": "./data/shapenetcorev2_hdf5_2048",                     # dataset's directory
         "savedir": "./exp_selfSupervised_shapenet_aggregate32_pl32_c128",           # directory where you want to save the output of the experiment
         "classes": [0,5,8,13,14,18,31,33,45,48,50],                     #[x for x in range(17) ], #earphone 20 # classes to be tested
         "anomalies" : None,                                             # classes to be used as Anomalies. if None, all non_normal classes are used

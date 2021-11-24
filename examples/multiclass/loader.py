@@ -36,7 +36,7 @@ cfg_pool = [
         # EXPERIMENT PARAMETERS
         #########################################
 
-        "rootdir": "./data/ShapeNetCore_hdf5_2048",                                # dataset's directory
+        "rootdir": "./data/shapenetcorev2_hdf5_2048",                                # dataset's directory
         "savedir": "./saved_reults/myExp",                               # directory where you want to save the output of the experiment
                                                                          # if testing, this directory has to contain a
                                                                          # network state named "state_dict.pth"
