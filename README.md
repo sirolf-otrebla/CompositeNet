@@ -85,11 +85,11 @@ You can find a description of every configurable parameter in the comments.
 
 You can load an external configuration or use the example one already in the code. To do that, simply write your configuration in a JSON file and load it by adding its path as CLI argument. For example:
 
-`python ./examples/multiclass/loader.py myConfig.json ` 
+`python ./examples/deep_svdd/loader.py myConfig.json ` 
 
 You can also fed loader.py with more than one configuration at a time: they will be exectued sequentially.
 
-`python ./examples/multiclass/loader.py ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
+`python ./examples/deep_svdd/loader.py ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
 
 ### Self-Supervised AD
 
@@ -101,9 +101,9 @@ You can find a description of every configurable parameter in the comments.
 
 You can load an external configuration or use the example one already in the code. To do that, simply write your configuration in a JSON file and load it by adding its path as CLI argument. For example:
 
-`python ./examples/multiclass/loader.py myConfig.json ` 
+`python ./examples/self_supervised/loader.py myConfig.json ` 
 
 You can also fed loader.py with more than one configuration at a time: they will be exectued sequentially.
 
-`python ./examples/multiclass/loader.py ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
+`python ./examples/self_supervised/loader.py ./myConfig1.json ./myConfig2.json  ./myConfig3.json` 
 
