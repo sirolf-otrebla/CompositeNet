@@ -3,7 +3,7 @@
 
 ## Introduction
 
-This repository contains all the code writed during the development of #BMVC submission 1368.
+This repository contains all the code writed during the development of CVPR submission 8953.
 The code is written in python, and makes use of the PyTorch library. Some components were originally
 developed by A. Boulch for *ConvPoint*, and are available here:
 
@@ -12,7 +12,7 @@ https://github.com/aboulch/ConvPoint
 
 ## Platform and dependencies
 
-The code was tested on Manjaro GNU/Linux "Nibia" 20.2.1, using a Conda environment with the following packages installed:
+The code was tested on Ubuntu GNU/Linux 18.04, using a Conda environment with the following packages installed:
 
 - CUDAtoolkit 11.4
 - CUDNN 7.6.5
