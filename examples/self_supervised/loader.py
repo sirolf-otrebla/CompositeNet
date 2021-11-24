@@ -75,7 +75,7 @@ if __name__ == '__main__':
     parser.add_argument('configs', metavar='C', nargs='*', default=None,
                         help='json path to desired network configuration. you can add more than one configuration and run them one after the other')
     args = parser.parse_args()
-    if args.configs != None:
+    if args.configs != []:
         cfg_pool = [ json.load(file) for file in [ open(path) for path in args.configs]]
 
     for c in cfg_pool:
