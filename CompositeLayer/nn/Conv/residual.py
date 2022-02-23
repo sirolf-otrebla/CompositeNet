@@ -78,11 +78,14 @@ class ResnetBlock( CompositeLayer.nn.Conv.LayerBase):
 
         input_f, pts = self.pool(input, points, K, next_pts)
 
-        main_f, _ = self.relu(self.pre_1x1(input_f, pts))
+        main_f, _ = self.pre_1x1(input_f, pts)
+        main_f =  self.relu(main_f)
         main_f, _ = self.conv(main_f, pts, K)
-        main_f, _ = self.relu(self.post_1x1(main_f, pts))
+        main_f, _ = self.post_1x1(main_f, pts)
+        main_f =  self.relu(main_f)
 
         shortcut_f, _ = self.relu(self.shortcut_1x1(input_f, pts))
+        shortcut_f = self.relu(shortcut_f)
 
         out_f = main_f + shortcut_f
 

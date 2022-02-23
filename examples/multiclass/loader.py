@@ -27,7 +27,7 @@ cfg_pool = [
 
         "pl": 32,                                                        # called J_0 in the paper, decides the number of outgoing features from each network's layer
         "dropout": 0.33,                                                 # you can choose between CompositeNet and the original ConvPoint architecture
-        "architecture": "ConvPoint",
+        "architecture": "ResidualCompositeNet",
         "TL_path": None,  # "./save/AD_TL/state_dict.pth",
         "batchsize": 16,
         "npoints": 1024,
