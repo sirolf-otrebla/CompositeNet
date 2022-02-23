@@ -1,9 +1,10 @@
 from CompositeLayer.nn.Conv import LayerBase, CompositeConv
+import CompositeLayer.nn.Conv
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class Layer1x1(LayerBase):
+class Layer1x1( CompositeLayer.nn.Conv.LayerBase):
 
     def __init__(self, input_features, output_features, config, use_bias=True, relu=False):
         super(LayerBase, self).__init__()
@@ -33,7 +34,7 @@ class Layer1x1(LayerBase):
             return out, next_pts
 
 
-class AveragePool(LayerBase):
+class AveragePool( CompositeLayer.nn.Conv.LayerBase):
 
     def __init__(self):
         super(LayerBase, self).__init__()
@@ -59,7 +60,7 @@ class AveragePool(LayerBase):
 
 
 
-class ResnetBlock(LayerBase):
+class ResnetBlock( CompositeLayer.nn.Conv.LayerBase):
 
     def __init__(self, input_features, output_features, config, dim, spatial_id, semantic_id ):
 
