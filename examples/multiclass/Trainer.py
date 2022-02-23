@@ -29,7 +29,9 @@ class modelBuilder():
         if model_name == "CompositeNet":
             from networks.network_classif import MCConpositeNet as Net
             return Net(self.input_channels, self.output_channels, config).float()
-
+        elif model_name =="ResidualCompositeNet":
+            from networks.residual import ResidualCompositeNet as Net
+            return Net(self.input_channels, self.output_channels, config).float()
         else:
             from networks.network_classif import MCConvPoint as Net
             return Net(self.input_channels, self.output_channels).float()
