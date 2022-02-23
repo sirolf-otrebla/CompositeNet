@@ -27,7 +27,7 @@ class Layer1x1( CompositeLayer.nn.Conv.LayerBase):
             # spatial_layer = spatial_layer.view(BATCH_SIZE, PTS_PER_POINT_CLOUD, NEIGHBOURS, -1)
 
         out = self.mlp(features)
-
+        print(out.shape)
         if return_indices:
             return out, next_pts, indices_
         else:
