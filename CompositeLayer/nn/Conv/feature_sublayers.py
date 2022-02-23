@@ -4,13 +4,12 @@ import torch.nn.functional as F
 import numpy as np
 import math
 
-#from global_tags import GlobalTags
-#if GlobalTags.legacy_layer_base():
-#    from ..legacy.layer_base import LayerBase
-#else:
-#    from ..layer_base import LayerBase
+from global_tags import GlobalTags
+if GlobalTags.legacy_layer_base():
+    from ..legacy.layer_base import LayerBase
+else:
+    from ..layer_base import LayerBase
 
-from CompositeLayer.nn.Conv import LayerBase
 
 
 class AggregateSemanticLayer(nn.Module):
