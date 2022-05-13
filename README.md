@@ -68,7 +68,7 @@ http://www.scan-net.org/
 
 ### MultiClass Classification
 
-you can run a multiclass classification by executing `./examples/multiclass/loader.py`.
+you can run a multiclass classification experiment by executing `./examples/multiclass/loader.py`.
 
 `python3 -m examples.multiclass.loader `
 
