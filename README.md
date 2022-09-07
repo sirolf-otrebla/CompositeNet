@@ -3,7 +3,6 @@
 
 ## Introduction
 
-This repository contains all the code writed during the development of CVPR submission 8953.
 The code is written in python, and makes use of the PyTorch library. Some components were originally
 developed by A. Boulch for *ConvPoint*, and are available here:
 
