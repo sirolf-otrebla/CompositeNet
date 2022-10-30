@@ -9,7 +9,7 @@ TEST_PLYS = os.path.join(PLY_PATH, "test")
 TRAIN_GOOD = os.path.join(GOOD_PATH, "train")
 TEST_GOOD = os.path.join(GOOD_PATH, "test")
 
-GOOD_P = 4
+GOOD_P = 5
 if __name__ == "__main__":
     print("\n\nstarting to compute descriptors for Train data...\n\n")
     classes = [c for c in os.listdir(TRAIN_PLYS) if c != ".DS_Store" ]
