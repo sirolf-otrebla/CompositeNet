@@ -5,7 +5,7 @@ from examples.multiclass.dataContainer import ModelNetDataContainer
 
 
 ROOT = "../data/shapenetcorev2_hdf5_2048"
-NPOINTS=512
+NPOINTS=1024
 SAVE_PATH = "../data/shapenet_ply_512pts"
 
 if __name__ == '__main__':
