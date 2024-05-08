@@ -121,7 +121,7 @@ class Trainer():
                 n_samples += outputs.shape[0]
                 c += torch.sum(outputs, dim=0)
         c /= n_samples
-        # If c_i is too close to 0, set to +-eps. Reason: a zero unit can be trivially matched with zero weights.
+        # If c_i is too close to 0, set to +-eps. Reason: a zero unit can be trivially matched with zero weights_s3dis.
         c[(abs(c) < eps) & (c < 0)] = -eps
         c[(abs(c) < eps) & (c > 0)] = eps
         return c
